@@ -225,12 +225,12 @@ describe('parseSkillSpec', () => {
   });
 
   describe('marketplace protocol', () => {
-    const known = new Set(['ikko', 'acme']);
+    const known = new Set(['acme', 'beta']);
 
     it('parses <marketplace>:<plugin>/<skill> when the name is registered', () => {
-      expect(parseSkillSpec('ikko:dev/aria-apg', known)).toEqual({
+      expect(parseSkillSpec('acme:dev/aria-apg', known)).toEqual({
         protocol: 'marketplace',
-        marketplace: 'ikko',
+        marketplace: 'acme',
         plugin: 'dev',
         skill: 'aria-apg',
       });
@@ -244,18 +244,18 @@ describe('parseSkillSpec', () => {
     });
 
     it('defaults to builtin when no marketplaces are known', () => {
-      expect(parseSkillSpec('ikko:dev/aria-apg')).toEqual({
+      expect(parseSkillSpec('acme:dev/aria-apg')).toEqual({
         protocol: 'builtin',
-        name: 'ikko:dev/aria-apg',
+        name: 'acme:dev/aria-apg',
       });
     });
 
     it('throws when the skill part is missing (explicit skill required)', () => {
-      expect(() => parseSkillSpec('ikko:dev', known)).toThrow(ConfigError);
+      expect(() => parseSkillSpec('acme:dev', known)).toThrow(ConfigError);
     });
 
     it('throws when the skill part contains a slash', () => {
-      expect(() => parseSkillSpec('ikko:dev/a/b', known)).toThrow(ConfigError);
+      expect(() => parseSkillSpec('acme:dev/a/b', known)).toThrow(ConfigError);
     });
 
     it('does not shadow the npm:/git:/file: protocols', () => {
@@ -285,14 +285,14 @@ describe('normalizeGitUrl', () => {
 
 describe('redactUrl', () => {
   it('replaces embedded credentials with ***', () => {
-    expect(redactUrl('https://foxy:secret-token@gitlab.example.com/tools/ikko-tools.git')).toBe(
-      'https://***@gitlab.example.com/tools/ikko-tools.git',
+    expect(redactUrl('https://ci-bot:secret-token@gitlab.example.com/tools/acme-tools.git')).toBe(
+      'https://***@gitlab.example.com/tools/acme-tools.git',
     );
   });
 
   it('leaves a credential-free URL unchanged', () => {
-    expect(redactUrl('https://gitlab.example.com/tools/ikko-tools.git')).toBe(
-      'https://gitlab.example.com/tools/ikko-tools.git',
+    expect(redactUrl('https://gitlab.example.com/tools/acme-tools.git')).toBe(
+      'https://gitlab.example.com/tools/acme-tools.git',
     );
   });
 

@@ -151,7 +151,7 @@ export async function loadAutoDiscoveredSkills(
  * | `git:https://host/org/s.git`       | `{ protocol: 'git', url: 'https://host/org/s.git', ref: '', subpath: '' }` |
  * | `git:https://host/org/b.git#v1/sec`| `{ protocol: 'git', url: 'https://host/org/b.git', ref: 'v1', subpath: 'sec' }` |
  * | `git+ssh://git@host/org/s.git`     | `{ protocol: 'git', url: 'ssh://git@host/org/s.git', ref: '', subpath: '' }` |
- * | `ikko:dev/aria-apg` (ikko known)   | `{ protocol: 'marketplace', marketplace: 'ikko', plugin: 'dev', skill: 'aria-apg' }` |
+ * | `acme:dev/aria-apg` (acme known)   | `{ protocol: 'marketplace', marketplace: 'acme', plugin: 'dev', skill: 'aria-apg' }` |
  *
  * A spec whose portion before the first `:` matches a registered marketplace
  * name (from `knownMarketplaces`) is parsed as a `marketplace` reference. The

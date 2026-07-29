@@ -160,20 +160,20 @@ describe('config env defaults', () => {
     const cfg = resolveConfig([], {
       ...baseEnv,
       CODE_REVIEW_MARKETPLACES:
-        'ikko=https://host/group/tools.git#0.6.13 , acme=anthropic:https://host/acme.git',
+        'acme=https://host/group/tools.git#0.6.13 , beta=anthropic:https://host/beta.git',
     });
     expect(cfg.marketplaces).toEqual([
-      { name: 'ikko', format: 'anthropic', url: 'https://host/group/tools.git', ref: '0.6.13' },
-      { name: 'acme', format: 'anthropic', url: 'https://host/acme.git', ref: '' },
+      { name: 'acme', format: 'anthropic', url: 'https://host/group/tools.git', ref: '0.6.13' },
+      { name: 'beta', format: 'anthropic', url: 'https://host/beta.git', ref: '' },
     ]);
   });
 
   it('prefers repeatable --marketplace flags over the env var', () => {
     const cfg = resolveConfig(
-      ['--marketplace', 'ikko=https://host/a.git', '--marketplace', 'acme=https://host/b.git'],
+      ['--marketplace', 'acme=https://host/a.git', '--marketplace', 'beta=https://host/b.git'],
       { ...baseEnv, CODE_REVIEW_MARKETPLACES: 'other=https://host/c.git' },
     );
-    expect(cfg.marketplaces.map((m) => m.name)).toEqual(['ikko', 'acme']);
+    expect(cfg.marketplaces.map((m) => m.name)).toEqual(['acme', 'beta']);
   });
 
   it('throws a ConfigError on a reserved marketplace name', () => {

@@ -77,9 +77,9 @@ Register marketplaces with the repeatable `--marketplace` flag or the comma-sepa
 ```yml
 variables:
   # Declare the marketplace once…
-  CODE_REVIEW_MARKETPLACES: 'ikko=https://foxy:${GITLAB_BOT_API_TOKEN}@gitlab.example.com/tools/ikko-tools.git#0.6.13'
+  CODE_REVIEW_MARKETPLACES: 'acme=https://ci-bot:${MARKETPLACE_GIT_TOKEN}@git.example.com/org/skills-marketplace.git#1.0.0'
   # …then pick skills by <marketplace>:<plugin>/<skill>
-  CODE_REVIEW_SKILLS: 'code-review,ikko:dev/aria-apg,ikko:dev/git-flow'
+  CODE_REVIEW_SKILLS: 'code-review,acme:dev/aria-apg,acme:dev/git-flow'
 ```
 
 | Part        | Notes                                                                                                                            |
@@ -89,7 +89,7 @@ variables:
 | `<url>`     | A git URL. Use `git+ssh://git@host/group/repo.git` for private GitLab over SSH. scp-style shorthand is not accepted.             |
 | `#<ref>`    | Optional pinned tag/branch/commit; the whole fragment is the ref (branch names may contain `/`). Defaults to the default branch. |
 
-A skill reference always requires an explicit skill: `ikko:dev` (plugin only) is rejected — use `ikko:dev/aria-apg`.
+A skill reference always requires an explicit skill: `acme:dev` (plugin only) is rejected — use `acme:dev/aria-apg`.
 
 The marketplace repo is cloned once and shared across every skill selected from it, using the same on-disk cache and `CODE_REVIEW_REFRESH_SKILLS=1` refresh behavior as `git:` skills. Embedded URL credentials are redacted from all logs, hints, and errors. Plugins whose `source` points at a remote (`github`/`url`/`git-subdir`/`npm`) are not fetched — only plugins that live inside the marketplace repository are resolved.
 
