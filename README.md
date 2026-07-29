@@ -176,7 +176,7 @@ The README covers getting started. Reference material lives in [`docs/`](https:/
 
 - [Configuration](https://github.com/weareikko/code-review/blob/main/docs/configuration.md) — full environment-variable and CLI-flag reference, plus the `CODE_REVIEW_` namespacing convention.
 - [Providers](https://github.com/weareikko/code-review/blob/main/docs/providers.md) — Anthropic, OpenRouter, Gemini, Ollama, and OpenAI-compatible endpoints, plus heterogeneous review with a model pool.
-- [Skills](https://github.com/weareikko/code-review/blob/main/docs/skills.md) — built-in, external (`npm:`/`file:`/`git:`), and project auto-discovered review skills.
+- [Skills](https://github.com/weareikko/code-review/blob/main/docs/skills.md) — built-in, external (`npm:`/`file:`/`git:`), Claude plugin marketplaces, and project auto-discovered review skills.
 - [Multi-stage review](https://github.com/weareikko/code-review/blob/main/docs/multi-stage-review.md) — the staged Find / Verify / Synthesize pipeline behind `--review-depth`.
 - [Observability](https://github.com/weareikko/code-review/blob/main/docs/observability.md) — diagnostics-channel tracing and the opt-in OpenTelemetry bridge (spans, metrics, logs).
 - [Output format](https://github.com/weareikko/code-review/blob/main/docs/output-format.md) — inline-comment shape, the upserted summary (a note on GitLab, an issue comment on GitHub), footer, and duplicate prevention.

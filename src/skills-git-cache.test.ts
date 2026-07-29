@@ -1,6 +1,6 @@
 // git-skill cache tests.
 //
-// These exercise the on-disk clone cache (`cloneGitSkill`) against an in-memory
+// These exercise the on-disk clone cache (`cloneGitRepo`) against an in-memory
 // filesystem (memfs) with a mocked `git` helper, so they verify cache creation,
 // reuse, refresh, recovery, and the concurrent-clone race **without touching the
 // real user filesystem** — not even the default `~/.cache` location, which is
@@ -69,7 +69,7 @@ beforeEach(async () => {
   await vol.promises.mkdir('/work', { recursive: true });
 });
 
-describe('cloneGitSkill — fresh clone', () => {
+describe('cloneGitRepo — fresh clone', () => {
   it('clones into the default cache dir entirely in memory', async () => {
     const skill = await loadNamedSkill('git:https://host/org/repo.git', '/work');
     expect(skill.source).toBe('git');
@@ -112,7 +112,7 @@ describe('cloneGitSkill — fresh clone', () => {
   });
 });
 
-describe('cloneGitSkill — cache reuse and refresh', () => {
+describe('cloneGitRepo — cache reuse and refresh', () => {
   async function seedCache(url: string, ref = '', name = 'cached'): Promise<string> {
     const { fs } = await import('memfs');
     const repoDir = join('/cache', gitSkillCacheKey(url, ref));
@@ -155,7 +155,7 @@ describe('cloneGitSkill — cache reuse and refresh', () => {
   });
 });
 
-describe('cloneGitSkill — concurrent-clone race', () => {
+describe('cloneGitRepo — concurrent-clone race', () => {
   it('adopts the cache entry a concurrent clone created when rename fails', async () => {
     const { fs } = await import('memfs');
     const url = 'https://host/org/repo.git';
@@ -186,7 +186,7 @@ describe('cloneGitSkill — concurrent-clone race', () => {
   });
 });
 
-describe('cloneGitSkill — failure paths', () => {
+describe('cloneGitRepo — failure paths', () => {
   it('throws ConfigError when the clone fails, leaving no cache entry', async () => {
     const { fs } = await import('memfs');
     gitMock.mockImplementation(async (args: string[]) => {

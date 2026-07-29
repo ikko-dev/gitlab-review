@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Claude plugin marketplaces as a skill source: declare one with `CODE_REVIEW_MARKETPLACES` / `--marketplace` (`<name>=<[format:]url[#ref]>`), then reference skills by logical `<marketplace>:<plugin>/<skill>` name — resolved via the repo's `.claude-plugin/marketplace.json` instead of a hand-written in-repo path. Defaults to the `anthropic` manifest format; credentials are redacted from logs/errors ([#142]).
+
 ## [0.9.3] - 2026-07-23
 
 ### Fixed
@@ -120,6 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.8.6]: https://github.com/weareikko/code-review/compare/0.8.5...0.8.6
 [0.8.5]: https://github.com/weareikko/code-review/compare/0.8.4...0.8.5
 [0.8.4]: https://github.com/weareikko/code-review/compare/0.8.3...0.8.4
+[#142]: https://github.com/weareikko/code-review/pull/142
 [#141]: https://github.com/weareikko/code-review/pull/141
 [#140]: https://github.com/weareikko/code-review/pull/140
 [#137]: https://github.com/weareikko/code-review/pull/137

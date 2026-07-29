@@ -43,6 +43,7 @@ A `--skill` value can carry a protocol prefix to load a skill from outside the p
 | `git:https://host/group/project.git`           | A shallow clone of the repo's default branch                                     |
 | `git:https://host/group/bundle.git#v1.2.0/sec` | A clone pinned to ref `v1.2.0`, loading the `sec/` sub-directory                 |
 | `git+ssh://git@host/group/project.git`         | A clone over SSH (recommended for private GitLab repos)                          |
+| `<marketplace>:<plugin>/<skill>`               | A skill inside a registered [marketplace](#marketplaces) (resolved by manifest)  |
 
 ### `git:` / `git+ssh:` skills
 
@@ -62,6 +63,35 @@ code-review --skill 'git+ssh://git@gitlab.example.com/tools/skills.git#main'
 Following the project's SSH-over-HTTPS convention, prefer `git+ssh://git@<host>/<group>/<project>.git` for private GitLab remotes — authentication then uses the SSH key already available to the runner. The scp-style shorthand (`git@host:group/project.git`) is intentionally not accepted, since its `:` collides with the `#ref` fragment; use the full `git+ssh://` URI instead.
 
 Clones are cached on disk under `${XDG_CACHE_HOME:-~/.cache}/code-review/skills/`, keyed by URL and ref. A tag or commit ref is immutable, so the cache is reused indefinitely; a **branch** ref is also cached, so set `CODE_REVIEW_REFRESH_SKILLS=1` to re-clone when the branch has moved (or delete the cache directory).
+
+## Marketplaces
+
+A [Claude plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces) is a git repository with a `.claude-plugin/marketplace.json` catalog that groups skills into named **plugins**. Instead of hand-writing the full clone URL and the physical `plugins/<plugin>/skills/<skill>` path for every `git:` skill, you declare the marketplace **once** and then reference skills by their logical `<marketplace>:<plugin>/<skill>` name — the path is resolved from the manifest.
+
+Skills are the open [agentskills.io](https://agentskills.io) `SKILL.md` standard and are portable across tools; only the marketplace _packaging_ is vendor-specific. This tool reads the Anthropic (Claude Code) `.claude-plugin/marketplace.json` layout by default.
+
+### Declaring marketplaces
+
+Register marketplaces with the repeatable `--marketplace` flag or the comma-separated `CODE_REVIEW_MARKETPLACES` variable. Each declaration is `<name>=<[format:]url[#ref]>`:
+
+```yml
+variables:
+  # Declare the marketplace once…
+  CODE_REVIEW_MARKETPLACES: 'acme=https://ci-bot:${MARKETPLACE_GIT_TOKEN}@git.example.com/org/skills-marketplace.git#1.0.0'
+  # …then pick skills by <marketplace>:<plugin>/<skill>
+  CODE_REVIEW_SKILLS: 'code-review,acme:dev/aria-apg,acme:dev/git-flow'
+```
+
+| Part        | Notes                                                                                                                            |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `<name>`    | Short handle used in skill specs. Cannot be `npm`, `file`, `git`, or `builtin` (they collide with skill-spec protocols).         |
+| `[format:]` | Optional manifest format. Defaults to `anthropic` (`.claude-plugin/marketplace.json`). Only `anthropic` is supported today.      |
+| `<url>`     | A git URL. Use `git+ssh://git@host/group/repo.git` for private GitLab over SSH. scp-style shorthand is not accepted.             |
+| `#<ref>`    | Optional pinned tag/branch/commit; the whole fragment is the ref (branch names may contain `/`). Defaults to the default branch. |
+
+A skill reference always requires an explicit skill: `acme:dev` (plugin only) is rejected — use `acme:dev/aria-apg`.
+
+The marketplace repo is cloned once and shared across every skill selected from it, using the same on-disk cache and `CODE_REVIEW_REFRESH_SKILLS=1` refresh behavior as `git:` skills. Embedded URL credentials are redacted from all logs, hints, and errors. Plugins whose `source` points at a remote (`github`/`url`/`git-subdir`/`npm`) are not fetched — only plugins that live inside the marketplace repository are resolved.
 
 ## Project skills (auto-discovery)
 

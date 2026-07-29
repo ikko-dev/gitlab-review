@@ -13,11 +13,13 @@ import { formatError, isQuotaExceededMessage, ReviewerError } from './errors.js'
 import { createGitTools } from './git-tool.js';
 import type { Logger } from './logger.js';
 import { noopLogger } from './logger.js';
+import type { MarketplaceRef } from './marketplaces.js';
+import { buildMarketplaceRegistry, loadMarketplaceSkill } from './marketplaces.js';
 import { parseReviewMarkdownWithWarnings } from './parser.js';
 import type { PriorThread } from './prior-threads.js';
 import { renderPriorThreadsBlock } from './prior-threads.js';
 import type { Skill } from './skills.js';
-import { loadAutoDiscoveredSkills, loadNamedSkill } from './skills.js';
+import { loadAutoDiscoveredSkills, loadNamedSkill, parseSkillSpec } from './skills.js';
 import {
   cleanupSkippedDiffs,
   renderRetrievableSkippedBlock,
@@ -327,6 +329,8 @@ async function walkUpContextFiles(
 export interface LoadReviewContextOptions {
   /** Re-clone `git:` / `git+ssh:` skills, bypassing the on-disk clone cache. */
   refreshGitSkills?: boolean;
+  /** Registered Claude-plugin marketplaces referenced by name in skill specs. */
+  marketplaces?: readonly MarketplaceRef[];
 }
 
 export async function loadReviewContext(
@@ -342,6 +346,9 @@ export async function loadReviewContext(
     loadAutoDiscoveredSkills(cwd, gitRoot, warn),
   ]);
 
+  const registry = buildMarketplaceRegistry(options.marketplaces ?? []);
+  const knownMarketplaces = new Set(registry.keys());
+
   const skills = [...discovered];
   const discoveredNames = new Set(discovered.map((s) => s.name));
   const named = await Promise.all(
@@ -349,6 +356,12 @@ export async function loadReviewContext(
       .filter((n) => !discoveredNames.has(n))
       .map(async (n) => {
         try {
+          const spec = parseSkillSpec(n, knownMarketplaces);
+          if (spec.protocol === 'marketplace') {
+            return await loadMarketplaceSkill(spec, registry, {
+              refresh: options.refreshGitSkills,
+            });
+          }
           return await loadNamedSkill(n, cwd, { refresh: options.refreshGitSkills });
         } catch (error) {
           // A skill is auxiliary guidance, not part of the diff under review.
@@ -1268,6 +1281,7 @@ export async function runReview(config: Config, options: RunReviewOptions): Prom
 
   const context = await loadReviewContext(cwd, config.skills, (msg) => logger.warn(msg), {
     refreshGitSkills: config.refreshGitSkills,
+    marketplaces: config.marketplaces,
   });
   const systemPrompt = buildJSONSystemPrompt(context, minSeverity);
   const userPrompt = buildUserPrompt(
