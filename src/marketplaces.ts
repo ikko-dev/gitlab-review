@@ -206,14 +206,27 @@ async function resolveAnthropicSkill(
   spec: MarketplaceSkillSpec,
 ): Promise<Skill> {
   const ref = `${mp.name}:${spec.plugin}/${spec.skill}`;
-  const manifestPath = join(repoDir, '.claude-plugin', 'marketplace.json');
+  // Resolve the clone root through symlinks once; every file we read is then
+  // bounds-checked against it (dir- AND file-level) so a symlinked entry in the
+  // marketplace cannot make a read escape the clone.
+  const realRoot = await realpath(repoDir);
+  const manifestRaw = await readTextInside(
+    realRoot,
+    join(repoDir, '.claude-plugin', 'marketplace.json'),
+    ref,
+  );
+  if (manifestRaw === null) {
+    throw new ConfigError(`Marketplace "${mp.name}" is not a valid Anthropic plugin marketplace`, {
+      hint: `Expected a readable .claude-plugin/marketplace.json at "${redactUrl(mp.url)}"${mp.ref ? ` (ref "${mp.ref}")` : ''}.`,
+    });
+  }
   let manifest: AnthropicMarketplaceManifest;
   try {
-    manifest = JSON.parse(await readFile(manifestPath, 'utf8')) as AnthropicMarketplaceManifest;
+    manifest = JSON.parse(manifestRaw) as AnthropicMarketplaceManifest;
   } catch (error) {
     throw new ConfigError(`Marketplace "${mp.name}" is not a valid Anthropic plugin marketplace`, {
       cause: error,
-      hint: `Expected a readable .claude-plugin/marketplace.json at "${redactUrl(mp.url)}"${mp.ref ? ` (ref "${mp.ref}")` : ''}.`,
+      hint: `.claude-plugin/marketplace.json at "${redactUrl(mp.url)}" is not valid JSON.`,
     });
   }
 
@@ -231,11 +244,13 @@ async function resolveAnthropicSkill(
   }
 
   const pluginDir = resolvePluginDir(repoDir, manifest, entry.source, mp, spec);
-  // Resolve the clone root and the plugin dir through symlinks up front, so a
-  // symlinked `source` can't make the plugin.json read escape the repository.
-  const realRoot = await realpath(repoDir);
   const realPluginDir = await resolveInside(realRoot, pluginDir, ref);
-  const pluginManifest = realPluginDir ? await readPluginManifest(realPluginDir, ref) : null;
+  // Only read plugin.json when the entry defers to it. With `strict: false` the
+  // marketplace entry is the sole component definition, so a stale or malformed
+  // plugin.json must be ignored rather than fail resolution.
+  const strict = entry.strict !== false;
+  const pluginManifest =
+    strict && realPluginDir ? await readPluginManifest(realRoot, realPluginDir, ref) : null;
   const bases = computeSkillBases(repoDir, pluginDir, entry, pluginManifest, ref);
 
   const skill = await findSkillInBases(realRoot, bases, pluginDir, spec.skill, ref);
@@ -254,15 +269,12 @@ async function resolveAnthropicSkill(
  * plugin's declared `skills` paths.
  */
 async function readPluginManifest(
+  realRoot: string,
   pluginDir: string,
   ref: string,
 ): Promise<AnthropicPluginManifest | null> {
-  let raw: string;
-  try {
-    raw = await readFile(join(pluginDir, '.claude-plugin', 'plugin.json'), 'utf8');
-  } catch {
-    return null; // absent — plugin.json is optional
-  }
+  const raw = await readTextInside(realRoot, join(pluginDir, '.claude-plugin', 'plugin.json'), ref);
+  if (raw === null) return null; // absent — plugin.json is optional
   try {
     return JSON.parse(raw) as AnthropicPluginManifest;
   } catch (error) {
@@ -361,22 +373,56 @@ async function resolveInside(realRoot: string, dir: string, ref: string): Promis
   } catch {
     return null; // does not exist — nothing is read
   }
-  if (real !== realRoot && !real.startsWith(realRoot + sep)) {
-    throw new ConfigError(`Refusing to load "${ref}": path escapes the marketplace repository`, {
-      hint: 'A plugin "source" or skill directory resolved (via ".." or a symlink) outside the cloned marketplace.',
-    });
-  }
+  assertInside(realRoot, real, ref);
   return real;
 }
 
-/** Load a skill from `dir` only if its real path stays within `realRoot`. */
+/** Throw if `real` (an already-resolved real path) is not within `realRoot`. */
+function assertInside(realRoot: string, real: string, ref: string): void {
+  if (real !== realRoot && !real.startsWith(realRoot + sep)) {
+    throw new ConfigError(`Refusing to load "${ref}": path escapes the marketplace repository`, {
+      hint: 'A plugin "source", manifest, or skill path resolved (via ".." or a symlink) outside the cloned marketplace.',
+    });
+  }
+}
+
+/**
+ * Read a file only if its real path (following any symlink on the file itself,
+ * not just its parent directory) stays within `realRoot`. Returns `null` when
+ * the file does not exist; throws a `ConfigError` when it resolves outside the
+ * marketplace, so a symlinked `SKILL.md` / manifest cannot exfiltrate an outside
+ * file's contents.
+ */
+async function readTextInside(
+  realRoot: string,
+  filePath: string,
+  ref: string,
+): Promise<string | null> {
+  let real: string;
+  try {
+    real = await realpath(filePath);
+  } catch {
+    return null; // does not exist
+  }
+  assertInside(realRoot, real, ref);
+  return readFile(real, 'utf8');
+}
+
+/**
+ * Load a skill from `dir` only if both the directory AND its `SKILL.md` file
+ * resolve within `realRoot`. Guarding the file (not just the directory) closes
+ * the case where a legitimate in-repo dir holds a `SKILL.md` symlinked outside.
+ */
 async function loadSkillIfInside(
   realRoot: string,
   dir: string,
   ref: string,
 ): Promise<Skill | null> {
   const real = await resolveInside(realRoot, dir, ref);
-  return real ? loadSkillFromDir(real, 'marketplace') : null;
+  if (!real) return null;
+  // Bounds-check the SKILL.md file itself before `loadSkillFromDir` reads it.
+  if ((await readTextInside(realRoot, join(real, 'SKILL.md'), ref)) === null) return null;
+  return loadSkillFromDir(real, 'marketplace');
 }
 
 /**

@@ -346,6 +346,41 @@ describe('loadMarketplaceSkill', () => {
     );
   });
 
+  it('ignores a malformed plugin.json when the entry is strict:false', async () => {
+    // strict:false makes the marketplace entry the sole definition, so a stale
+    // plugin.json must not be read — resolution succeeds via the entry's skills.
+    ctl.files = {
+      '.claude-plugin/marketplace.json': manifest({
+        plugins: [{ name: 'dev', source: './plugins/dev', strict: false, skills: ['./extra'] }],
+      }),
+      'plugins/dev/.claude-plugin/plugin.json': '{ not valid json',
+      'plugins/dev/extra/aria-apg/SKILL.md': ARIA,
+    };
+    const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
+    expect(skill.name).toBe('aria-apg');
+  });
+
+  it('refuses a SKILL.md that symlinks outside the repo', async () => {
+    // The skill directory is legitimately in-repo, but its SKILL.md is a symlink
+    // to an outside file — the dir guard passes, the file guard must not.
+    const { fs } = await import('memfs');
+    const repoDir = join('/cache', gitSkillCacheKey('https://host/group/tools.git', '0.6.13'));
+    await fs.promises.mkdir(join(repoDir, '.git'), { recursive: true });
+    await fs.promises.mkdir(join(repoDir, '.claude-plugin'), { recursive: true });
+    await fs.promises.writeFile(join(repoDir, '.claude-plugin/marketplace.json'), manifest());
+    await fs.promises.mkdir(join(repoDir, 'plugins/dev/skills/aria-apg'), { recursive: true });
+    await fs.promises.mkdir('/outside', { recursive: true });
+    await fs.promises.writeFile('/outside/secret.md', ARIA);
+    await fs.promises.symlink(
+      '/outside/secret.md',
+      join(repoDir, 'plugins/dev/skills/aria-apg/SKILL.md'),
+    );
+
+    await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(
+      /escapes the marketplace/,
+    );
+  });
+
   it('errors when the repo has no .claude-plugin/marketplace.json', async () => {
     ctl.files = { 'README.md': 'not a marketplace' };
     await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(
