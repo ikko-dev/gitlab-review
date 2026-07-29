@@ -68,7 +68,7 @@ const FORMAT_PREFIX_PATTERN = /^([a-z][a-z0-9-]*):(?!\/\/)/;
 export function parseMarketplaceEntry(entry: string): MarketplaceRef {
   const eqIdx = entry.indexOf('=');
   if (eqIdx <= 0) {
-    throw new ConfigError(`Invalid marketplace declaration: "${entry}"`, {
+    throw new ConfigError(`Invalid marketplace declaration: "${redactUrl(entry)}"`, {
       hint: 'Use <name>=<git-url>[#ref], e.g. acme=https://host/group/tools.git#1.0.0.',
     });
   }
@@ -90,7 +90,7 @@ export function parseMarketplaceEntry(entry: string): MarketplaceRef {
   if (formatMatch) {
     const token = formatMatch[1];
     if (!(MARKETPLACE_FORMATS as readonly string[]).includes(token)) {
-      throw new ConfigError(`Unknown marketplace format "${token}" in "${entry}"`, {
+      throw new ConfigError(`Unknown marketplace format "${token}" in "${redactUrl(entry)}"`, {
         hint: `Supported formats: ${MARKETPLACE_FORMATS.join(', ')}. Omit the prefix (e.g. "${name}=https://…") to default to "${DEFAULT_MARKETPLACE_FORMAT}".`,
       });
     }

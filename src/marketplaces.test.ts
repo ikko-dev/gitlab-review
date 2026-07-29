@@ -134,10 +134,14 @@ describe('parseMarketplaceEntry', () => {
     expect(() => parseMarketplaceEntry('acme=git@host:group/repo.git')).toThrow(ConfigError);
   });
 
-  it('redacts embedded credentials from the invalid-URL error', () => {
+  it.each([
+    ['invalid URL', 'acme=https://ci-bot:secret-token@bad host'],
+    ['missing "=" (raw credentialed URL)', 'https://ci-bot:secret-token@host/repo.git'],
+    ['unknown format prefix', 'acme=nope:https://ci-bot:secret-token@host/repo.git'],
+  ])('redacts embedded credentials from the %s error', (_label, entry) => {
     let error: ConfigError | undefined;
     try {
-      parseMarketplaceEntry('acme=https://ci-bot:secret-token@bad host');
+      parseMarketplaceEntry(entry);
     } catch (e) {
       error = e as ConfigError;
     }
