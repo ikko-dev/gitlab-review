@@ -344,6 +344,9 @@ async function gitShallowClone(url: string, ref: string, dir: string): Promise<v
   await git(['checkout', '--quiet', 'FETCH_HEAD'], { cwd: dir });
 }
 
+/** Monotonic counter making each clone's temp dir unique within the process. */
+let cloneSeq = 0;
+
 /**
  * Resolve a git URL + ref to a local clone directory, reusing the on-disk cache
  * when possible. The clone lands in a temp sibling first and is renamed into
@@ -368,7 +371,10 @@ export async function cloneGitRepo(
   }
 
   await mkdir(options.cacheDir, { recursive: true });
-  const tmpDir = `${repoDir}.tmp-${process.pid}`;
+  // A per-invocation suffix (not just the pid) keeps concurrent clones of the
+  // SAME url+ref — the common case when several skills come from one marketplace
+  // — from sharing one temp dir and stomping each other's in-flight checkout.
+  const tmpDir = `${repoDir}.tmp-${process.pid}-${(cloneSeq += 1)}`;
   await rm(tmpDir, { recursive: true, force: true });
   try {
     await gitShallowClone(url, ref, tmpDir);

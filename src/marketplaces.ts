@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, realpath } from 'node:fs/promises';
 import { join, resolve, sep } from 'node:path';
 import { ConfigError } from './errors.js';
 import {
@@ -102,7 +102,7 @@ export function parseMarketplaceEntry(entry: string): MarketplaceRef {
   try {
     parsed = new URL(normalizeGitUrl(rhs));
   } catch {
-    throw new ConfigError(`Invalid marketplace URL for "${name}": "${rhs}"`, {
+    throw new ConfigError(`Invalid marketplace URL for "${name}": "${redactUrl(rhs)}"`, {
       hint: 'Expected a git URL like https://host/group/tools.git or git+ssh://git@host/group/tools.git. scp-style (git@host:group/repo.git) is not supported — use the ssh:// form.',
     });
   }
@@ -234,7 +234,7 @@ async function resolveAnthropicSkill(
   const pluginManifest = await readPluginManifest(pluginDir);
   const bases = computeSkillBases(repoDir, pluginDir, entry, pluginManifest, ref);
 
-  const skill = await findSkillInBases(bases, pluginDir, spec.skill);
+  const skill = await findSkillInBases(repoDir, bases, pluginDir, spec.skill, ref);
   if (!skill) {
     throw new ConfigError(`Cannot load skill: "${ref}"`, {
       hint: `No skill "${spec.skill}" found in plugin "${spec.plugin}". Looked under the default skills/ directory${bases.length > 1 ? ' and the plugin\'s custom "skills" paths' : ''}. Check the skill name against the marketplace.`,
@@ -305,21 +305,53 @@ function resolveUnderPlugin(repoDir: string, pluginDir: string, rel: string, ref
  * container of skill sub-directories (`<base>/<skill>/SKILL.md`) or a single
  * skill directory (`<base>/SKILL.md`, matched by its frontmatter `name`). Falls
  * back to a single `SKILL.md` at the plugin root (single-skill plugins).
+ *
+ * Every candidate is verified with {@link loadSkillIfInside} to resolve through
+ * symlinks and reject any directory that escapes the cloned marketplace before a
+ * file is read.
  */
 async function findSkillInBases(
+  repoDir: string,
   bases: string[],
   pluginDir: string,
   skillName: string,
+  ref: string,
 ): Promise<Skill | null> {
+  const realRoot = await realpath(repoDir);
   for (const base of bases) {
     // `skillName` is validated to contain no `/`, so this stays within `base`.
-    const container = await loadSkillFromDir(join(base, skillName), 'marketplace');
+    const container = await loadSkillIfInside(realRoot, join(base, skillName), ref);
     if (container) return container;
-    const single = await loadSkillFromDir(base, 'marketplace');
+    const single = await loadSkillIfInside(realRoot, base, ref);
     if (single && single.name === skillName) return single;
   }
-  const root = await loadSkillFromDir(pluginDir, 'marketplace');
+  const root = await loadSkillIfInside(realRoot, pluginDir, ref);
   return root && root.name === skillName ? root : null;
+}
+
+/**
+ * Load a skill from `dir` only if its real path stays within `realRoot`. A
+ * missing directory resolves to `null` (nothing to read); a directory that
+ * resolves — through `..` or a symlink — outside the marketplace throws a
+ * `ConfigError`, so a malicious manifest cannot read files outside the clone.
+ */
+async function loadSkillIfInside(
+  realRoot: string,
+  dir: string,
+  ref: string,
+): Promise<Skill | null> {
+  let real: string;
+  try {
+    real = await realpath(dir);
+  } catch {
+    return null; // does not exist — nothing is read
+  }
+  if (real !== realRoot && !real.startsWith(realRoot + sep)) {
+    throw new ConfigError(`Refusing to load "${ref}": path escapes the marketplace repository`, {
+      hint: 'A plugin "source" or skill directory resolved (via ".." or a symlink) outside the cloned marketplace.',
+    });
+  }
+  return loadSkillFromDir(real, 'marketplace');
 }
 
 /**

@@ -28,6 +28,7 @@ vi.mock('./git.js', () => ({ git: gitMock }));
 
 const { buildMarketplaceRegistry, loadMarketplaceSkill, parseMarketplaceEntry } =
   await import('./marketplaces.js');
+const { gitSkillCacheKey } = await import('./skills.js');
 
 function skillMd(name: string, description: string): string {
   return `---\nname: ${name}\ndescription: ${description}\n---\nBody.`;
@@ -131,6 +132,18 @@ describe('parseMarketplaceEntry', () => {
 
   it('rejects scp-style shorthand (ambiguous), pointing at the ssh:// form', () => {
     expect(() => parseMarketplaceEntry('acme=git@host:group/repo.git')).toThrow(ConfigError);
+  });
+
+  it('redacts embedded credentials from the invalid-URL error', () => {
+    let error: ConfigError | undefined;
+    try {
+      parseMarketplaceEntry('acme=https://ci-bot:secret-token@bad host');
+    } catch (e) {
+      error = e as ConfigError;
+    }
+    expect(error).toBeInstanceOf(ConfigError);
+    expect(error?.message).not.toContain('secret-token');
+    expect(error?.message).toContain('***@');
   });
 });
 
@@ -279,6 +292,24 @@ describe('loadMarketplaceSkill', () => {
         plugins: [{ name: 'dev', source: '../evil' }],
       }),
     };
+    await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(
+      /escapes the marketplace/,
+    );
+  });
+
+  it('refuses a skill directory that symlinks outside the repo', async () => {
+    // Pre-seed a valid clone so cloneGitRepo short-circuits (no git mock needed),
+    // then point a skill dir at a symlink that escapes the marketplace.
+    const { fs } = await import('memfs');
+    const repoDir = join('/cache', gitSkillCacheKey('https://host/group/tools.git', '0.6.13'));
+    await fs.promises.mkdir(join(repoDir, '.git'), { recursive: true });
+    await fs.promises.mkdir(join(repoDir, '.claude-plugin'), { recursive: true });
+    await fs.promises.writeFile(join(repoDir, '.claude-plugin/marketplace.json'), manifest());
+    await fs.promises.mkdir(join(repoDir, 'plugins/dev/skills'), { recursive: true });
+    await fs.promises.mkdir('/outside/aria-apg', { recursive: true });
+    await fs.promises.writeFile('/outside/aria-apg/SKILL.md', ARIA);
+    await fs.promises.symlink('/outside/aria-apg', join(repoDir, 'plugins/dev/skills/aria-apg'));
+
     await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(
       /escapes the marketplace/,
     );
