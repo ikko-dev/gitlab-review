@@ -315,6 +315,33 @@ describe('loadMarketplaceSkill', () => {
     );
   });
 
+  it('refuses a plugin source that symlinks outside the repo', async () => {
+    const { fs } = await import('memfs');
+    const repoDir = join('/cache', gitSkillCacheKey('https://host/group/tools.git', '0.6.13'));
+    await fs.promises.mkdir(join(repoDir, '.git'), { recursive: true });
+    await fs.promises.mkdir(join(repoDir, '.claude-plugin'), { recursive: true });
+    await fs.promises.writeFile(join(repoDir, '.claude-plugin/marketplace.json'), manifest());
+    await fs.promises.mkdir(join(repoDir, 'plugins'), { recursive: true });
+    await fs.promises.mkdir('/outside/dev/skills/aria-apg', { recursive: true });
+    await fs.promises.writeFile('/outside/dev/skills/aria-apg/SKILL.md', ARIA);
+    await fs.promises.symlink('/outside/dev', join(repoDir, 'plugins/dev'));
+
+    await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(
+      /escapes the marketplace/,
+    );
+  });
+
+  it('throws on a malformed plugin.json instead of silently ignoring it', async () => {
+    ctl.files = {
+      '.claude-plugin/marketplace.json': manifest(),
+      'plugins/dev/.claude-plugin/plugin.json': '{ not valid json',
+      'plugins/dev/skills/aria-apg/SKILL.md': ARIA,
+    };
+    await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(
+      /Malformed plugin.json/,
+    );
+  });
+
   it('errors when the repo has no .claude-plugin/marketplace.json', async () => {
     ctl.files = { 'README.md': 'not a marketplace' };
     await expect(loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' })).rejects.toThrow(

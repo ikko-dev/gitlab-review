@@ -231,10 +231,14 @@ async function resolveAnthropicSkill(
   }
 
   const pluginDir = resolvePluginDir(repoDir, manifest, entry.source, mp, spec);
-  const pluginManifest = await readPluginManifest(pluginDir);
+  // Resolve the clone root and the plugin dir through symlinks up front, so a
+  // symlinked `source` can't make the plugin.json read escape the repository.
+  const realRoot = await realpath(repoDir);
+  const realPluginDir = await resolveInside(realRoot, pluginDir, ref);
+  const pluginManifest = realPluginDir ? await readPluginManifest(realPluginDir, ref) : null;
   const bases = computeSkillBases(repoDir, pluginDir, entry, pluginManifest, ref);
 
-  const skill = await findSkillInBases(repoDir, bases, pluginDir, spec.skill, ref);
+  const skill = await findSkillInBases(realRoot, bases, pluginDir, spec.skill, ref);
   if (!skill) {
     throw new ConfigError(`Cannot load skill: "${ref}"`, {
       hint: `No skill "${spec.skill}" found in plugin "${spec.plugin}". Looked under the default skills/ directory${bases.length > 1 ? ' and the plugin\'s custom "skills" paths' : ''}. Check the skill name against the marketplace.`,
@@ -243,13 +247,29 @@ async function resolveAnthropicSkill(
   return skill;
 }
 
-/** Read a plugin's optional `.claude-plugin/plugin.json`; returns null if absent. */
-async function readPluginManifest(pluginDir: string): Promise<AnthropicPluginManifest | null> {
+/**
+ * Read a plugin's optional `.claude-plugin/plugin.json`. A missing file returns
+ * `null` (the manifest is optional), but a malformed one throws a `ConfigError`
+ * rather than being silently ignored — otherwise a typo would quietly drop the
+ * plugin's declared `skills` paths.
+ */
+async function readPluginManifest(
+  pluginDir: string,
+  ref: string,
+): Promise<AnthropicPluginManifest | null> {
+  let raw: string;
   try {
-    const raw = await readFile(join(pluginDir, '.claude-plugin', 'plugin.json'), 'utf8');
-    return JSON.parse(raw) as AnthropicPluginManifest;
+    raw = await readFile(join(pluginDir, '.claude-plugin', 'plugin.json'), 'utf8');
   } catch {
-    return null;
+    return null; // absent — plugin.json is optional
+  }
+  try {
+    return JSON.parse(raw) as AnthropicPluginManifest;
+  } catch (error) {
+    throw new ConfigError(`Malformed plugin.json for "${ref}"`, {
+      cause: error,
+      hint: "The plugin's .claude-plugin/plugin.json is not valid JSON. Fix it in the marketplace repository.",
+    });
   }
 }
 
@@ -311,13 +331,12 @@ function resolveUnderPlugin(repoDir: string, pluginDir: string, rel: string, ref
  * file is read.
  */
 async function findSkillInBases(
-  repoDir: string,
+  realRoot: string,
   bases: string[],
   pluginDir: string,
   skillName: string,
   ref: string,
 ): Promise<Skill | null> {
-  const realRoot = await realpath(repoDir);
   for (const base of bases) {
     // `skillName` is validated to contain no `/`, so this stays within `base`.
     const container = await loadSkillIfInside(realRoot, join(base, skillName), ref);
@@ -330,16 +349,12 @@ async function findSkillInBases(
 }
 
 /**
- * Load a skill from `dir` only if its real path stays within `realRoot`. A
- * missing directory resolves to `null` (nothing to read); a directory that
- * resolves — through `..` or a symlink — outside the marketplace throws a
- * `ConfigError`, so a malicious manifest cannot read files outside the clone.
+ * Resolve `dir` through symlinks and confirm it stays within `realRoot`. Returns
+ * the real path, or `null` when the directory does not exist (nothing to read).
+ * A directory that resolves — via `..` or a symlink — outside the marketplace
+ * throws a `ConfigError`, so a malicious manifest cannot reach outside the clone.
  */
-async function loadSkillIfInside(
-  realRoot: string,
-  dir: string,
-  ref: string,
-): Promise<Skill | null> {
+async function resolveInside(realRoot: string, dir: string, ref: string): Promise<string | null> {
   let real: string;
   try {
     real = await realpath(dir);
@@ -351,7 +366,17 @@ async function loadSkillIfInside(
       hint: 'A plugin "source" or skill directory resolved (via ".." or a symlink) outside the cloned marketplace.',
     });
   }
-  return loadSkillFromDir(real, 'marketplace');
+  return real;
+}
+
+/** Load a skill from `dir` only if its real path stays within `realRoot`. */
+async function loadSkillIfInside(
+  realRoot: string,
+  dir: string,
+  ref: string,
+): Promise<Skill | null> {
+  const real = await resolveInside(realRoot, dir, ref);
+  return real ? loadSkillFromDir(real, 'marketplace') : null;
 }
 
 /**
