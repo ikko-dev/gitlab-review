@@ -152,6 +152,36 @@ describe('config env defaults', () => {
     expect(cfg.verifyModel).toBe('cloudflare-ai-gateway/gpt-5.4');
   });
 
+  it('defaults marketplaces to an empty list when unset', () => {
+    expect(resolveConfig([], { ...baseEnv }).marketplaces).toEqual([]);
+  });
+
+  it('parses CODE_REVIEW_MARKETPLACES as a comma-separated list of declarations', () => {
+    const cfg = resolveConfig([], {
+      ...baseEnv,
+      CODE_REVIEW_MARKETPLACES:
+        'ikko=https://host/group/tools.git#0.6.13 , acme=anthropic:https://host/acme.git',
+    });
+    expect(cfg.marketplaces).toEqual([
+      { name: 'ikko', format: 'anthropic', url: 'https://host/group/tools.git', ref: '0.6.13' },
+      { name: 'acme', format: 'anthropic', url: 'https://host/acme.git', ref: '' },
+    ]);
+  });
+
+  it('prefers repeatable --marketplace flags over the env var', () => {
+    const cfg = resolveConfig(
+      ['--marketplace', 'ikko=https://host/a.git', '--marketplace', 'acme=https://host/b.git'],
+      { ...baseEnv, CODE_REVIEW_MARKETPLACES: 'other=https://host/c.git' },
+    );
+    expect(cfg.marketplaces.map((m) => m.name)).toEqual(['ikko', 'acme']);
+  });
+
+  it('throws a ConfigError on a reserved marketplace name', () => {
+    expect(() =>
+      resolveConfig([], { ...baseEnv, CODE_REVIEW_MARKETPLACES: 'git=https://host/a.git' }),
+    ).toThrow(ConfigError);
+  });
+
   it('prefers --verify-model over CODE_REVIEW_VERIFY_MODEL', () => {
     const cfg = resolveConfig(['--verify-model', 'openai/gpt-5.4'], {
       ...baseEnv,
@@ -438,6 +468,7 @@ describe('per-platform validateConfig', () => {
     verbose: false,
     cwd: '/tmp',
     skills: [],
+    marketplaces: [],
     refreshGitSkills: false,
     modelPool: [],
   };
@@ -507,6 +538,7 @@ describe('validateConfig', () => {
     verbose: false,
     cwd: '/tmp',
     skills: [],
+    marketplaces: [],
     refreshGitSkills: false,
     modelPool: [],
   } as Config;
@@ -1254,6 +1286,7 @@ describe('applyCodeReviewEnvPrefix', () => {
         'DECOMPOSE_HINT_LINES',
         'FORCE_REVIEW',
         'MAX_DIFF_CHARS',
+        'MARKETPLACES',
         'MAX_TOKENS',
         'MIN_SEVERITY',
         'MODEL',

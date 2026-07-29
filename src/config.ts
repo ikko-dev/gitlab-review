@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { getEnvApiKey } from '@earendil-works/pi-ai';
 import { ConfigError } from './errors.js';
 import { DEFAULT_GITHUB_API_URL } from './github.js';
+import { type MarketplaceRef, parseMarketplaceEntry } from './marketplaces.js';
 import { POSTING_MODES, type PostingMode } from './posting.js';
 import {
   REVIEW_DEPTHS,
@@ -50,6 +51,7 @@ export const RESERVED_ENV_SUFFIXES = [
   'FORCE_REVIEW',
   'VERBOSE',
   'SKILLS',
+  'MARKETPLACES',
   'REFRESH_SKILLS',
   'THINKING_LEVEL',
 ] as const;
@@ -208,6 +210,8 @@ export interface Config {
   verbose: boolean;
   cwd: string;
   skills: string[];
+  /** Claude-plugin marketplaces referenced by name in `skills` specs. */
+  marketplaces: MarketplaceRef[];
   /** Re-clone `git:` / `git+ssh:` skills, bypassing the on-disk clone cache. */
   refreshGitSkills: boolean;
 }
@@ -226,7 +230,7 @@ const BOOLEAN_FLAGS = new Set([
   'version',
 ]);
 
-const MULTI_FLAGS = new Set(['skill']);
+const MULTI_FLAGS = new Set(['skill', 'marketplace']);
 
 export function parseArgs(argv: string[]): ParsedArgs {
   const args: ParsedArgs = {};
@@ -365,6 +369,25 @@ function resolveSkills(args: ParsedArgs, env: NodeJS.ProcessEnv): string[] {
       .map((s) => s.trim())
       .filter(Boolean);
   return [];
+}
+
+/**
+ * Resolve marketplace declarations from `--marketplace` (repeatable, preferred)
+ * or the comma-separated `CODE_REVIEW_MARKETPLACES`. Each entry is
+ * `<name>=<[format:]url[#ref]>`; parsing throws a `ConfigError` on malformed
+ * entries, reserved names, or unknown formats (fail fast on misconfiguration).
+ */
+function resolveMarketplaces(args: ParsedArgs, env: NodeJS.ProcessEnv): MarketplaceRef[] {
+  const argMarketplace = args.marketplace;
+  const raw: string[] = Array.isArray(argMarketplace)
+    ? argMarketplace
+    : typeof argMarketplace === 'string' && argMarketplace.length > 0
+      ? [argMarketplace]
+      : (env.CODE_REVIEW_MARKETPLACES ?? '').split(',');
+  return raw
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => parseMarketplaceEntry(entry));
 }
 
 /**
@@ -609,6 +632,7 @@ export function resolveConfig(argv = process.argv.slice(2), env = process.env): 
     verbose: toBoolean(args.verbose) || toBoolean(env.CODE_REVIEW_VERBOSE),
     cwd: String(args.cwd ?? process.cwd()),
     skills: resolveSkills(args, env),
+    marketplaces: resolveMarketplaces(args, env),
     refreshGitSkills: toBoolean(env.CODE_REVIEW_REFRESH_SKILLS),
   };
 }
