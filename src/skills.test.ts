@@ -8,7 +8,9 @@ import {
   loadAutoDiscoveredSkills,
   loadNamedSkill,
   loadSkillFromDir,
+  normalizeGitUrl,
   parseSkillSpec,
+  redactUrl,
   resolveNpmSkillDir,
   resolveSkillCacheDir,
 } from './skills.js';
@@ -220,6 +222,82 @@ describe('parseSkillSpec', () => {
         subpath: '',
       });
     });
+  });
+
+  describe('marketplace protocol', () => {
+    const known = new Set(['ikko', 'acme']);
+
+    it('parses <marketplace>:<plugin>/<skill> when the name is registered', () => {
+      expect(parseSkillSpec('ikko:dev/aria-apg', known)).toEqual({
+        protocol: 'marketplace',
+        marketplace: 'ikko',
+        plugin: 'dev',
+        skill: 'aria-apg',
+      });
+    });
+
+    it('treats a colon spec as a builtin name when the prefix is not registered', () => {
+      expect(parseSkillSpec('unknown:dev/aria-apg', known)).toEqual({
+        protocol: 'builtin',
+        name: 'unknown:dev/aria-apg',
+      });
+    });
+
+    it('defaults to builtin when no marketplaces are known', () => {
+      expect(parseSkillSpec('ikko:dev/aria-apg')).toEqual({
+        protocol: 'builtin',
+        name: 'ikko:dev/aria-apg',
+      });
+    });
+
+    it('throws when the skill part is missing (explicit skill required)', () => {
+      expect(() => parseSkillSpec('ikko:dev', known)).toThrow(ConfigError);
+    });
+
+    it('throws when the skill part contains a slash', () => {
+      expect(() => parseSkillSpec('ikko:dev/a/b', known)).toThrow(ConfigError);
+    });
+
+    it('does not shadow the npm:/git:/file: protocols', () => {
+      const withNpm = new Set(['npm']);
+      expect(parseSkillSpec('npm:my-skill', withNpm)).toEqual({
+        protocol: 'npm',
+        packageName: 'my-skill',
+        subpath: '',
+      });
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// normalizeGitUrl / redactUrl
+// ---------------------------------------------------------------------------
+
+describe('normalizeGitUrl', () => {
+  it('strips a leading git+ transport marker', () => {
+    expect(normalizeGitUrl('git+ssh://git@host/org/repo.git')).toBe('ssh://git@host/org/repo.git');
+  });
+
+  it('leaves a plain URL unchanged', () => {
+    expect(normalizeGitUrl('https://host/org/repo.git')).toBe('https://host/org/repo.git');
+  });
+});
+
+describe('redactUrl', () => {
+  it('replaces embedded credentials with ***', () => {
+    expect(redactUrl('https://foxy:secret-token@gitlab.example.com/tools/ikko-tools.git')).toBe(
+      'https://***@gitlab.example.com/tools/ikko-tools.git',
+    );
+  });
+
+  it('leaves a credential-free URL unchanged', () => {
+    expect(redactUrl('https://gitlab.example.com/tools/ikko-tools.git')).toBe(
+      'https://gitlab.example.com/tools/ikko-tools.git',
+    );
+  });
+
+  it('best-effort scrubs a non-URL string with userinfo', () => {
+    expect(redactUrl('ssh://git:token@host:org/repo.git')).toContain('***@');
   });
 });
 

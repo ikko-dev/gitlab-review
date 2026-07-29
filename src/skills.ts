@@ -15,7 +15,7 @@ export interface Skill {
   filePath: string;
   rootDir: string;
   resourceDirs: string[];
-  source: 'builtin' | 'project' | 'npm' | 'file' | 'git';
+  source: 'builtin' | 'project' | 'npm' | 'file' | 'git' | 'marketplace';
 }
 
 /**
@@ -25,12 +25,15 @@ export interface Skill {
  * - `npm`      — package in `node_modules`, optionally with a sub-directory
  * - `file`     — explicit filesystem path (relative or absolute)
  * - `git`      — shallow git clone at a pinned ref, optionally with a sub-directory
+ * - `marketplace` — a skill inside a Claude-plugin marketplace registered by name
+ *   (resolved via its `.claude-plugin/marketplace.json`); see `marketplaces.ts`
  */
 export type SkillSpec =
   | { protocol: 'builtin'; name: string }
   | { protocol: 'npm'; packageName: string; subpath: string }
   | { protocol: 'file'; path: string }
-  | { protocol: 'git'; url: string; ref: string; subpath: string };
+  | { protocol: 'git'; url: string; ref: string; subpath: string }
+  | { protocol: 'marketplace'; marketplace: string; plugin: string; skill: string };
 
 const SKILL_DIRS = ['.agents/skills', '.claude/skills'] as const;
 const RESOURCE_DIRS = ['references'] as const;
@@ -148,8 +151,16 @@ export async function loadAutoDiscoveredSkills(
  * | `git:https://host/org/s.git`       | `{ protocol: 'git', url: 'https://host/org/s.git', ref: '', subpath: '' }` |
  * | `git:https://host/org/b.git#v1/sec`| `{ protocol: 'git', url: 'https://host/org/b.git', ref: 'v1', subpath: 'sec' }` |
  * | `git+ssh://git@host/org/s.git`     | `{ protocol: 'git', url: 'ssh://git@host/org/s.git', ref: '', subpath: '' }` |
+ * | `ikko:dev/aria-apg` (ikko known)   | `{ protocol: 'marketplace', marketplace: 'ikko', plugin: 'dev', skill: 'aria-apg' }` |
+ *
+ * A spec whose portion before the first `:` matches a registered marketplace
+ * name (from `knownMarketplaces`) is parsed as a `marketplace` reference. The
+ * remainder must be `<plugin>/<skill>` — an explicit skill is always required.
  */
-export function parseSkillSpec(spec: string): SkillSpec {
+export function parseSkillSpec(
+  spec: string,
+  knownMarketplaces: ReadonlySet<string> = new Set(),
+): SkillSpec {
   if (spec.startsWith('file:')) {
     return { protocol: 'file', path: spec.slice('file:'.length) };
   }
@@ -184,8 +195,38 @@ export function parseSkillSpec(spec: string): SkillSpec {
     return parseGitSpec(spec);
   }
 
+  // <marketplace>:<plugin>/<skill> — only when the prefix names a registered
+  // marketplace, so a bare skill name with no colon still resolves as builtin.
+  const colonIdx = spec.indexOf(':');
+  if (colonIdx > 0 && knownMarketplaces.has(spec.slice(0, colonIdx))) {
+    return parseMarketplaceSkillSpec(spec, colonIdx);
+  }
+
   // Bare name → builtin
   return { protocol: 'builtin', name: spec };
+}
+
+/**
+ * Parse the `<marketplace>:<plugin>/<skill>` selector into its parts. The
+ * marketplace name has already been matched against the registry by the caller;
+ * `colonIdx` is the index of the separating `:`. Throws a `ConfigError` when the
+ * `<plugin>/<skill>` remainder is malformed (a skill name is always required).
+ */
+function parseMarketplaceSkillSpec(
+  spec: string,
+  colonIdx: number,
+): Extract<SkillSpec, { protocol: 'marketplace' }> {
+  const marketplace = spec.slice(0, colonIdx);
+  const rest = spec.slice(colonIdx + 1);
+  const slashIdx = rest.indexOf('/');
+  const plugin = slashIdx === -1 ? rest : rest.slice(0, slashIdx);
+  const skill = slashIdx === -1 ? '' : rest.slice(slashIdx + 1);
+  if (!plugin || !skill || skill.includes('/')) {
+    throw new ConfigError(`Cannot load skill: "${spec}"`, {
+      hint: `Marketplace skills use the form "<marketplace>:<plugin>/<skill>", e.g. "${marketplace}:dev/aria-apg".`,
+    });
+  }
+  return { protocol: 'marketplace', marketplace, plugin, skill };
 }
 
 /**
@@ -253,6 +294,29 @@ export async function resolveNpmSkillDir(
   return null;
 }
 
+/** Strip a leading `git+` transport marker (`git+ssh://…` → `ssh://…`). */
+export function normalizeGitUrl(raw: string): string {
+  return raw.startsWith('git+') ? raw.slice('git+'.length) : raw;
+}
+
+/**
+ * Remove embedded credentials from a URL so it is safe to show in logs, hints,
+ * and errors. `https://user:token@host/path` becomes `https://***@host/path`.
+ * Non-URL strings are returned with a best-effort `//user@` → `//***@` scrub.
+ */
+export function redactUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (parsed.username || parsed.password) {
+      parsed.username = '***';
+      parsed.password = '';
+    }
+    return parsed.toString();
+  } catch {
+    return url.replace(/\/\/[^/@]+@/, '//***@');
+  }
+}
+
 /** Base directory for cached git-skill clones (honours `XDG_CACHE_HOME`). */
 export function resolveSkillCacheDir(): string {
   const base = process.env.XDG_CACHE_HOME?.trim() || join(homedir(), '.cache');
@@ -281,12 +345,13 @@ async function gitShallowClone(url: string, ref: string, dir: string): Promise<v
 }
 
 /**
- * Resolve a git skill spec to a local clone directory, reusing the on-disk
- * cache when possible. The clone lands in a temp sibling first and is renamed
- * into place atomically, so a crashed or concurrent clone never leaves a
- * half-written cache entry. With `refresh`, any cached copy is discarded first.
+ * Resolve a git URL + ref to a local clone directory, reusing the on-disk cache
+ * when possible. The clone lands in a temp sibling first and is renamed into
+ * place atomically, so a crashed or concurrent clone never leaves a half-written
+ * cache entry. With `refresh`, any cached copy is discarded first. Shared by
+ * `git:` skills and Claude-plugin marketplaces (see `marketplaces.ts`).
  */
-async function cloneGitSkill(
+export async function cloneGitRepo(
   url: string,
   ref: string,
   options: { cacheDir: string; refresh: boolean },
@@ -393,10 +458,20 @@ export async function loadNamedSkill(
     return skill;
   }
 
+  if (parsed.protocol === 'marketplace') {
+    // Marketplace specs are dispatched to `loadMarketplaceSkill` before reaching
+    // here (this function's own `parseSkillSpec` call passes no known
+    // marketplaces, so this branch is unreachable in practice). Guard defensively
+    // and narrow the type for the `git` block below.
+    throw new ConfigError(`Cannot load skill: "${spec}"`, {
+      hint: 'Marketplace skills must be resolved through a registered marketplace, not loaded directly.',
+    });
+  }
+
   // git: / git+ssh: — shallow clone at a pinned ref, then load from the cache.
   let repoDir: string;
   try {
-    repoDir = await cloneGitSkill(parsed.url, parsed.ref, {
+    repoDir = await cloneGitRepo(parsed.url, parsed.ref, {
       cacheDir: options.cacheDir ?? resolveSkillCacheDir(),
       refresh: options.refresh ?? false,
     });
@@ -404,7 +479,7 @@ export async function loadNamedSkill(
     const atRef = parsed.ref ? ` at ref "${parsed.ref}"` : '';
     throw new ConfigError(`Cannot load skill: "${spec}"`, {
       cause: error,
-      hint: `Failed to clone "${parsed.url}"${atRef}. Check the URL, the ref, and your git credentials. For GitLab, prefer the SSH form: git+ssh://git@host/group/project.git`,
+      hint: `Failed to clone "${redactUrl(parsed.url)}"${atRef}. Check the URL, the ref, and your git credentials. For GitLab, prefer the SSH form: git+ssh://git@host/group/project.git`,
     });
   }
 
