@@ -53,8 +53,8 @@ function installCloneMock(): void {
 
 function manifest(overrides: Record<string, unknown> = {}): string {
   return JSON.stringify({
-    name: 'ikko',
-    owner: { name: 'Ikko' },
+    name: 'acme',
+    owner: { name: 'Acme' },
     plugins: [{ name: 'dev', source: './plugins/dev' }],
     ...overrides,
   });
@@ -79,8 +79,8 @@ beforeEach(async () => {
 
 describe('parseMarketplaceEntry', () => {
   it('parses <name>=<url>#<ref> with the default anthropic format', () => {
-    expect(parseMarketplaceEntry('ikko=https://host/group/tools.git#0.6.13')).toEqual({
-      name: 'ikko',
+    expect(parseMarketplaceEntry('acme=https://host/group/tools.git#0.6.13')).toEqual({
+      name: 'acme',
       format: 'anthropic',
       url: 'https://host/group/tools.git',
       ref: '0.6.13',
@@ -88,8 +88,8 @@ describe('parseMarketplaceEntry', () => {
   });
 
   it('accepts an explicit anthropic: format prefix', () => {
-    expect(parseMarketplaceEntry('ikko=anthropic:https://host/group/tools.git#1.0.0')).toEqual({
-      name: 'ikko',
+    expect(parseMarketplaceEntry('acme=anthropic:https://host/group/tools.git#1.0.0')).toEqual({
+      name: 'acme',
       format: 'anthropic',
       url: 'https://host/group/tools.git',
       ref: '1.0.0',
@@ -97,8 +97,8 @@ describe('parseMarketplaceEntry', () => {
   });
 
   it('normalizes git+ssh:// to ssh:// and keeps the whole fragment as the ref', () => {
-    expect(parseMarketplaceEntry('ikko=git+ssh://git@host/group/tools.git#feature/x')).toEqual({
-      name: 'ikko',
+    expect(parseMarketplaceEntry('acme=git+ssh://git@host/group/tools.git#feature/x')).toEqual({
+      name: 'acme',
       format: 'anthropic',
       url: 'ssh://git@host/group/tools.git',
       ref: 'feature/x',
@@ -106,11 +106,11 @@ describe('parseMarketplaceEntry', () => {
   });
 
   it('defaults ref to empty when no fragment is given', () => {
-    expect(parseMarketplaceEntry('ikko=https://host/group/tools.git').ref).toBe('');
+    expect(parseMarketplaceEntry('acme=https://host/group/tools.git').ref).toBe('');
   });
 
   it('throws on a missing "="', () => {
-    expect(() => parseMarketplaceEntry('ikko https://host/tools.git')).toThrow(ConfigError);
+    expect(() => parseMarketplaceEntry('acme https://host/tools.git')).toThrow(ConfigError);
   });
 
   it('throws on a reserved name', () => {
@@ -122,15 +122,15 @@ describe('parseMarketplaceEntry', () => {
   });
 
   it('throws on an unknown format prefix', () => {
-    expect(() => parseMarketplaceEntry('ikko=codex:https://host/tools.git')).toThrow(/format/);
+    expect(() => parseMarketplaceEntry('acme=codex:https://host/tools.git')).toThrow(/format/);
   });
 
   it('throws on an invalid URL', () => {
-    expect(() => parseMarketplaceEntry('ikko=not a url')).toThrow(ConfigError);
+    expect(() => parseMarketplaceEntry('acme=not a url')).toThrow(ConfigError);
   });
 
   it('rejects scp-style shorthand (ambiguous), pointing at the ssh:// form', () => {
-    expect(() => parseMarketplaceEntry('ikko=git@host:group/repo.git')).toThrow(ConfigError);
+    expect(() => parseMarketplaceEntry('acme=git@host:group/repo.git')).toThrow(ConfigError);
   });
 });
 
@@ -141,17 +141,17 @@ describe('parseMarketplaceEntry', () => {
 describe('buildMarketplaceRegistry', () => {
   it('keys refs by name', () => {
     const reg = buildMarketplaceRegistry([
-      parseMarketplaceEntry('ikko=https://host/a.git'),
-      parseMarketplaceEntry('acme=https://host/b.git'),
+      parseMarketplaceEntry('acme=https://host/a.git'),
+      parseMarketplaceEntry('beta=https://host/b.git'),
     ]);
-    expect([...reg.keys()]).toEqual(['ikko', 'acme']);
+    expect([...reg.keys()]).toEqual(['acme', 'beta']);
   });
 
   it('throws on a duplicate name', () => {
     expect(() =>
       buildMarketplaceRegistry([
-        parseMarketplaceEntry('ikko=https://host/a.git'),
-        parseMarketplaceEntry('ikko=https://host/b.git'),
+        parseMarketplaceEntry('acme=https://host/a.git'),
+        parseMarketplaceEntry('acme=https://host/b.git'),
       ]),
     ).toThrow(/[Dd]uplicate/);
   });
@@ -164,12 +164,12 @@ describe('buildMarketplaceRegistry', () => {
 describe('loadMarketplaceSkill', () => {
   const spec = {
     protocol: 'marketplace' as const,
-    marketplace: 'ikko',
+    marketplace: 'acme',
     plugin: 'dev',
     skill: 'aria-apg',
   };
   const registry = () =>
-    buildMarketplaceRegistry([parseMarketplaceEntry('ikko=https://host/group/tools.git#0.6.13')]);
+    buildMarketplaceRegistry([parseMarketplaceEntry('acme=https://host/group/tools.git#0.6.13')]);
 
   it('resolves a skill via marketplace.json → plugin source → skills/<skill>', async () => {
     const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
@@ -192,6 +192,53 @@ describe('loadMarketplaceSkill', () => {
   it('supports a marketplace-root plugin source (".")', async () => {
     ctl.files = {
       '.claude-plugin/marketplace.json': manifest({ plugins: [{ name: 'dev', source: '.' }] }),
+      'skills/aria-apg/SKILL.md': ARIA,
+    };
+    const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
+    expect(skill.name).toBe('aria-apg');
+  });
+
+  it('honors a custom "skills" path on the marketplace entry (added to default scan)', async () => {
+    ctl.files = {
+      '.claude-plugin/marketplace.json': manifest({
+        plugins: [{ name: 'dev', source: './plugins/dev', skills: ['./extra-skills/'] }],
+      }),
+      'plugins/dev/extra-skills/aria-apg/SKILL.md': ARIA,
+    };
+    const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
+    expect(skill.name).toBe('aria-apg');
+  });
+
+  it('honors a "skills" field declared in the plugin\'s plugin.json', async () => {
+    ctl.files = {
+      '.claude-plugin/marketplace.json': manifest(),
+      'plugins/dev/.claude-plugin/plugin.json': JSON.stringify({
+        name: 'dev',
+        skills: './custom/skills/',
+      }),
+      'plugins/dev/custom/skills/aria-apg/SKILL.md': ARIA,
+    };
+    const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
+    expect(skill.name).toBe('aria-apg');
+  });
+
+  it('resolves a "skills" path that points directly at a single skill directory', async () => {
+    ctl.files = {
+      '.claude-plugin/marketplace.json': manifest({
+        plugins: [{ name: 'dev', source: './plugins/dev', skills: ['./bundled/aria-apg'] }],
+      }),
+      // The dir is named differently from the skill; the frontmatter name matches.
+      'plugins/dev/bundled/aria-apg/SKILL.md': ARIA,
+    };
+    const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
+    expect(skill.name).toBe('aria-apg');
+  });
+
+  it('resolves via a marketplace-root source with specific "skills" subdirs', async () => {
+    ctl.files = {
+      '.claude-plugin/marketplace.json': manifest({
+        plugins: [{ name: 'dev', source: './', skills: ['./skills/aria-apg'] }],
+      }),
       'skills/aria-apg/SKILL.md': ARIA,
     };
     const skill = await loadMarketplaceSkill(spec, registry(), { cacheDir: '/cache' });
@@ -250,13 +297,13 @@ describe('loadMarketplaceSkill', () => {
       (e) => e as ConfigError,
     );
     expect(error).toBeInstanceOf(ConfigError);
-    expect(error.hint).toMatch(/No marketplace named "ikko"/);
+    expect(error.hint).toMatch(/No marketplace named "acme"/);
   });
 
   it('redacts credentials from the clone-failure hint', async () => {
     ctl.failClone = true;
     const reg = buildMarketplaceRegistry([
-      parseMarketplaceEntry('ikko=https://foxy:secret-token@host/group/tools.git#0.6.13'),
+      parseMarketplaceEntry('acme=https://ci-bot:secret-token@host/group/tools.git#0.6.13'),
     ]);
     let hint: string | undefined;
     try {

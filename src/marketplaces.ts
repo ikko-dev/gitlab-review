@@ -58,9 +58,9 @@ const FORMAT_PREFIX_PATTERN = /^([a-z][a-z0-9-]*):(?!\/\/)/;
 /**
  * Parse a single marketplace declaration: `<name>=<[format:]url[#ref]>`.
  *
- * - `ikko=https://host/group/tools.git#1.0.0` → default `anthropic` format
- * - `ikko=anthropic:https://host/group/tools.git#1.0.0` → explicit format
- * - `ikko=git+ssh://git@host/group/tools.git#main` → SSH transport
+ * - `acme=https://host/group/tools.git#1.0.0` → default `anthropic` format
+ * - `acme=anthropic:https://host/group/tools.git#1.0.0` → explicit format
+ * - `acme=git+ssh://git@host/group/tools.git#main` → SSH transport
  *
  * The `#<ref>` fragment is taken whole as the ref (branch names may contain
  * `/`). Throws a `ConfigError` with an actionable hint on any malformed input.
@@ -69,7 +69,7 @@ export function parseMarketplaceEntry(entry: string): MarketplaceRef {
   const eqIdx = entry.indexOf('=');
   if (eqIdx <= 0) {
     throw new ConfigError(`Invalid marketplace declaration: "${entry}"`, {
-      hint: 'Use <name>=<git-url>[#ref], e.g. ikko=https://host/group/tools.git#1.0.0.',
+      hint: 'Use <name>=<git-url>[#ref], e.g. acme=https://host/group/tools.git#1.0.0.',
     });
   }
   const name = entry.slice(0, eqIdx).trim();
@@ -129,10 +129,25 @@ export function buildMarketplaceRegistry(refs: readonly MarketplaceRef[]): Marke
   return registry;
 }
 
+/** Minimal shape of a plugin entry in a `.claude-plugin/marketplace.json`. */
+interface AnthropicPluginEntry {
+  name?: unknown;
+  source?: unknown;
+  /** Extra skill directories, added to the default `skills/` scan. */
+  skills?: unknown;
+  /** When `false`, the marketplace entry is the sole component definition. */
+  strict?: unknown;
+}
+
 /** Minimal shape of the fields we read from a `.claude-plugin/marketplace.json`. */
 interface AnthropicMarketplaceManifest {
   metadata?: { pluginRoot?: unknown };
-  plugins?: Array<{ name?: unknown; source?: unknown }>;
+  plugins?: AnthropicPluginEntry[];
+}
+
+/** Minimal shape of the fields we read from a plugin's `.claude-plugin/plugin.json`. */
+interface AnthropicPluginManifest {
+  skills?: unknown;
 }
 
 type MarketplaceSkillSpec = Extract<SkillSpec, { protocol: 'marketplace' }>;
@@ -216,16 +231,95 @@ async function resolveAnthropicSkill(
   }
 
   const pluginDir = resolvePluginDir(repoDir, manifest, entry.source, mp, spec);
-  const skillDir = join(pluginDir, 'skills', spec.skill);
-  ensureInside(repoDir, skillDir, ref);
+  const pluginManifest = await readPluginManifest(pluginDir);
+  const bases = computeSkillBases(repoDir, pluginDir, entry, pluginManifest, ref);
 
-  const skill = await loadSkillFromDir(skillDir, 'marketplace');
+  const skill = await findSkillInBases(bases, pluginDir, spec.skill);
   if (!skill) {
     throw new ConfigError(`Cannot load skill: "${ref}"`, {
-      hint: `No valid SKILL.md at "skills/${spec.skill}" inside plugin "${spec.plugin}". Check the skill name against the marketplace.`,
+      hint: `No skill "${spec.skill}" found in plugin "${spec.plugin}". Looked under the default skills/ directory${bases.length > 1 ? ' and the plugin\'s custom "skills" paths' : ''}. Check the skill name against the marketplace.`,
     });
   }
   return skill;
+}
+
+/** Read a plugin's optional `.claude-plugin/plugin.json`; returns null if absent. */
+async function readPluginManifest(pluginDir: string): Promise<AnthropicPluginManifest | null> {
+  try {
+    const raw = await readFile(join(pluginDir, '.claude-plugin', 'plugin.json'), 'utf8');
+    return JSON.parse(raw) as AnthropicPluginManifest;
+  } catch {
+    return null;
+  }
+}
+
+/** Normalize a `skills`/`commands` manifest field (string | string[]) to a path list. */
+function toPathArray(value: unknown): string[] {
+  const raw = typeof value === 'string' ? [value] : Array.isArray(value) ? value : [];
+  return raw
+    .filter((v): v is string => typeof v === 'string')
+    .map((v) => v.trim())
+    .filter(Boolean);
+}
+
+/**
+ * Compute the directories to search for a named skill, per the plugin schema:
+ * the default `<plugin>/skills/` scan plus any directories declared in the
+ * `skills` field of the marketplace entry and (unless `strict: false`) the
+ * plugin's own `plugin.json`. When the plugin source resolves to the marketplace
+ * root and the entry lists specific `skills` subdirectories, those replace the
+ * default scan rather than adding to it.
+ */
+function computeSkillBases(
+  repoDir: string,
+  pluginDir: string,
+  entry: AnthropicPluginEntry,
+  pluginManifest: AnthropicPluginManifest | null,
+  ref: string,
+): string[] {
+  const strict = entry.strict !== false;
+  const entrySkills = toPathArray(entry.skills);
+  const declared = strict ? [...entrySkills, ...toPathArray(pluginManifest?.skills)] : entrySkills;
+  const custom = declared.map((p) => resolveUnderPlugin(repoDir, pluginDir, p, ref));
+
+  const rootSourceException = resolve(pluginDir) === resolve(repoDir) && entrySkills.length > 0;
+  const bases = rootSourceException ? custom : [join(pluginDir, 'skills'), ...custom];
+  return [...new Set(bases)];
+}
+
+/** Resolve a plugin-relative `skills` path to an absolute dir, guarding escapes. */
+function resolveUnderPlugin(repoDir: string, pluginDir: string, rel: string, ref: string): string {
+  let p = rel.trim();
+  if (p === '.' || p === './') {
+    p = '';
+  } else if (p.startsWith('./')) {
+    p = p.slice(2);
+  }
+  const dir = join(pluginDir, p);
+  ensureInside(repoDir, dir, ref);
+  return dir;
+}
+
+/**
+ * Find `skillName` across the candidate base directories. Each base is either a
+ * container of skill sub-directories (`<base>/<skill>/SKILL.md`) or a single
+ * skill directory (`<base>/SKILL.md`, matched by its frontmatter `name`). Falls
+ * back to a single `SKILL.md` at the plugin root (single-skill plugins).
+ */
+async function findSkillInBases(
+  bases: string[],
+  pluginDir: string,
+  skillName: string,
+): Promise<Skill | null> {
+  for (const base of bases) {
+    // `skillName` is validated to contain no `/`, so this stays within `base`.
+    const container = await loadSkillFromDir(join(base, skillName), 'marketplace');
+    if (container) return container;
+    const single = await loadSkillFromDir(base, 'marketplace');
+    if (single && single.name === skillName) return single;
+  }
+  const root = await loadSkillFromDir(pluginDir, 'marketplace');
+  return root && root.name === skillName ? root : null;
 }
 
 /**
