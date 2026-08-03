@@ -1,6 +1,6 @@
 {
   "name": "@weareikko/code-review",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Agent-driven code review for GitLab merge requests and GitHub pull requests, with deduplicated inline comments and summary notes.",
   "keywords": [
     "ci",
