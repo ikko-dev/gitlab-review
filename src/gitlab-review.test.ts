@@ -11,6 +11,7 @@ import {
   buildEffectivePool,
   buildJSONSystemPrompt,
   buildUserPrompt,
+  createReviewStreamFn,
   filterDiff,
   loadReviewContext,
   resolveVerifyMember,
@@ -2105,5 +2106,31 @@ describe('blendedCost', () => {
   it('returns 0 when the model has no cost metadata', () => {
     const model = {} as unknown as Parameters<typeof blendedCost>[0];
     expect(blendedCost(model)).toBe(0);
+  });
+});
+
+describe('createReviewStreamFn', () => {
+  it('threads process.env as options.env (cloudflare-ai-gateway base-URL substitution) and preserves options', () => {
+    const seen: Array<Record<string, unknown>> = [];
+    const fakeStream = ((_model: unknown, _context: unknown, options: unknown) => {
+      seen.push(options as Record<string, unknown>);
+      return undefined as never;
+    }) as unknown as Parameters<typeof createReviewStreamFn>[0];
+
+    const prev = process.env.CLOUDFLARE_ACCOUNT_ID;
+    process.env.CLOUDFLARE_ACCOUNT_ID = 'acct-test';
+    try {
+      const streamFn = createReviewStreamFn(fakeStream);
+      streamFn({} as never, {} as never, { apiKey: 'k', maxTokens: 7 } as never);
+      expect(seen).toHaveLength(1);
+      // env must be present so pi-ai can fill {CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}
+      expect((seen[0].env as Record<string, string>).CLOUDFLARE_ACCOUNT_ID).toBe('acct-test');
+      // existing options must be preserved, not clobbered
+      expect(seen[0].apiKey).toBe('k');
+      expect(seen[0].maxTokens).toBe(7);
+    } finally {
+      if (prev === undefined) delete process.env.CLOUDFLARE_ACCOUNT_ID;
+      else process.env.CLOUDFLARE_ACCOUNT_ID = prev;
+    }
   });
 });

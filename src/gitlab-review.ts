@@ -258,6 +258,27 @@ const SEVERITY_RULE: Record<GitLabReviewSeverity, string | null> = {
 
 const exec = promisify(execFile);
 
+/**
+ * Stream function for the reviewer agent.
+ *
+ * pi-ai >=0.82 requires an explicit stream function (earlier versions built one
+ * internally from model + getApiKey); `streamSimple` is the drop-in. Critically,
+ * 0.83 also moved cloudflare-ai-gateway base-URL substitution — the
+ * `{CLOUDFLARE_ACCOUNT_ID}` / `{CLOUDFLARE_GATEWAY_ID}` placeholders — from a
+ * direct `process.env` read to an explicit `env` on the stream options. Without
+ * threading `env` through, the gateway URL keeps its literal placeholders and
+ * every request fails with Cloudflare 401 2035 ("Invalid request path"). Passing
+ * `env` is harmless for providers whose base URL has no placeholders.
+ *
+ * `stream` is injectable so the env threading can be unit-tested without a live call.
+ */
+export function createReviewStreamFn(
+  stream: typeof streamSimple = streamSimple,
+): typeof streamSimple {
+  return (model, context, options) =>
+    stream(model, context, { ...options, env: process.env as unknown as Record<string, string> });
+}
+
 function defaultCreateAgent(params: CreateAgentParams): AgentLike {
   return new Agent({
     initialState: {
@@ -267,10 +288,7 @@ function defaultCreateAgent(params: CreateAgentParams): AgentLike {
       thinkingLevel: params.thinkingLevel,
     },
     getApiKey: params.getApiKey,
-    // pi-ai >=0.82 requires an explicit stream function (earlier versions built
-    // one internally from model + getApiKey). streamSimple is pi-ai's drop-in
-    // with the matching StreamFn signature.
-    streamFn: streamSimple,
+    streamFn: createReviewStreamFn(),
   });
 }
 
