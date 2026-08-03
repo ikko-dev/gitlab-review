@@ -1,12 +1,10 @@
+import type { Api, KnownProvider, Model } from '@earendil-works/pi-ai';
 import {
-  type Api,
   completeSimple,
   getEnvApiKey,
-  getModel,
-  type KnownProvider,
-  type Model,
   registerBuiltInApiProviders,
-} from '@earendil-works/pi-ai';
+} from '@earendil-works/pi-ai/compat';
+import { getBuiltinModel } from '@earendil-works/pi-ai/providers/all';
 import { createJudge } from 'vitest-evals';
 import type { Judge, JudgeContext } from 'vitest-evals';
 
@@ -54,9 +52,9 @@ async function callJudge(systemPrompt: string, userPrompt: string): Promise<LlmJ
       `LLM judge requires the ${provider} provider key in env (e.g. CLOUDFLARE_API_KEY for cloudflare-ai-gateway)`,
     );
   }
-  // getModel is statically typed against the MODELS table; the judge model is a
-  // runtime string, so resolve through a widened signature.
-  const resolve = getModel as (p: KnownProvider, m: string) => Model<Api>;
+  // getBuiltinModel is statically typed against the MODELS table; the judge
+  // model is a runtime string, so resolve through a widened signature.
+  const resolve = getBuiltinModel as (p: KnownProvider, m: string) => Model<Api>;
   const model = resolve(provider as KnownProvider, modelId);
   const result = await completeSimple(
     model,

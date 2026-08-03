@@ -4,8 +4,9 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { AgentEvent, AgentTool } from '@earendil-works/pi-agent-core';
 import { Agent } from '@earendil-works/pi-agent-core';
-import type { AssistantMessage, KnownProvider, Model } from '@earendil-works/pi-ai';
-import { getModel } from '@earendil-works/pi-ai';
+import type { AssistantMessage, Model } from '@earendil-works/pi-ai';
+import { streamSimple } from '@earendil-works/pi-ai/compat';
+import { getBuiltinModel } from '@earendil-works/pi-ai/providers/all';
 import { createReadOnlyTools } from '@earendil-works/pi-coding-agent';
 import type { Config } from './config.js';
 import { resolveProviderApiKey } from './config.js';
@@ -266,6 +267,10 @@ function defaultCreateAgent(params: CreateAgentParams): AgentLike {
       thinkingLevel: params.thinkingLevel,
     },
     getApiKey: params.getApiKey,
+    // pi-ai >=0.82 requires an explicit stream function (earlier versions built
+    // one internally from model + getApiKey). streamSimple is pi-ai's drop-in
+    // with the matching StreamFn signature.
+    streamFn: streamSimple,
   });
 }
 
@@ -928,7 +933,7 @@ function resolveModel(modelString: string, baseUrl: string, maxTokens: number): 
     return buildOllamaModel(modelId, effectiveBase, maxTokens);
   }
 
-  const model = getModel(provider as KnownProvider, modelId as never) as Model<string> | undefined;
+  const model = getBuiltinModel(provider as never, modelId as never) as Model<string> | undefined;
   if (!model) {
     throw new ReviewerError(`Unknown model "${modelString}".`, {
       hint: `Check that "${provider}" is a valid provider and "${modelId}" is a registered model ID.`,

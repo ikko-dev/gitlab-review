@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { getEnvApiKey } from '@earendil-works/pi-ai';
+import { getEnvApiKey } from '@earendil-works/pi-ai/compat';
 import { ConfigError } from './errors.js';
 import { DEFAULT_GITHUB_API_URL } from './github.js';
 import { type MarketplaceRef, parseMarketplaceEntry } from './marketplaces.js';
