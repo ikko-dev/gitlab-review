@@ -679,18 +679,38 @@ test(
     // recover from. Set GITLAB_REVIEW_COMPARE_FRESH=1 to ignore the checkpoint.
     const completed = new Set<string>();
     if (process.env.GITLAB_REVIEW_COMPARE_FRESH !== '1') {
+      // Only resume records that belong to the CURRENT run configuration. A
+      // checkpoint from a different MODELS/TRIALS/scenario set (e.g. after
+      // changing env or toggling smoke mode) would otherwise pollute the report
+      // and break the final records.length assertion.
+      const modelSet = new Set(MODELS);
+      const scenarioSet = new Set(RUN_SCENARIOS.map((s) => s.id));
       try {
         const prior = JSON.parse(
           await readFile(join(RESULTS_DIR, 'model-comparison.json'), 'utf8'),
         ) as {
           records?: TrialRecord[];
         };
+        let skipped = 0;
         for (const rec of prior.records ?? []) {
           if (rec.error) continue; // re-run failed trials
+          if (
+            !modelSet.has(rec.model) ||
+            !scenarioSet.has(rec.scenario) ||
+            rec.trial < 0 ||
+            rec.trial >= TRIALS
+          ) {
+            skipped++;
+            continue; // record is from a different run configuration
+          }
           records.push(rec);
           completed.add(recordKey(rec.model, rec.scenario, rec.trial));
         }
-        if (records.length) console.log(`[resume] loaded ${records.length} completed records`);
+        if (records.length || skipped)
+          console.log(
+            `[resume] loaded ${records.length} completed records` +
+              (skipped ? ` (skipped ${skipped} from a different configuration)` : ''),
+          );
       } catch {
         // no checkpoint — fresh run
       }
