@@ -712,6 +712,28 @@ test(
     let done = 0;
     let cursor = 0;
 
+    // Checkpoint writes are funnelled through a single-writer queue. Many workers
+    // finish concurrently, and unsynchronized writeFile calls to the same path can
+    // interleave (corrupting the JSON) or land out of order — an older snapshot
+    // overwriting a newer one and dropping completed records. The queue runs one
+    // write at a time; each snapshots the latest `records` when it actually runs.
+    // A failed write doesn't break the queue, but its own caller still sees the error.
+    let checkpointChain: Promise<void> = Promise.resolve();
+    function writeCheckpoint(): Promise<void> {
+      const run = checkpointChain.then(() =>
+        writeFile(
+          join(RESULTS_DIR, 'model-comparison.json'),
+          JSON.stringify(
+            { models: MODELS, trials: TRIALS, scenarios: RUN_SCENARIOS.length, records },
+            null,
+            2,
+          ),
+        ),
+      );
+      checkpointChain = run.catch(() => {});
+      return run;
+    }
+
     async function processTask(t: (typeof tasks)[number]): Promise<void> {
       const result = await runOne(t.model, t.scenario);
       const judges: TrialRecord['judges'] = [];
@@ -748,14 +770,9 @@ test(
       const tag = result.error ? `ERROR ${result.error.slice(0, 60)}` : 'ok';
       console.log(`[${done}/${total}] ${t.model} · ${t.scenario.id} · t${t.trial} → ${tag}`);
       // Checkpoint after every record so a crash mid-run keeps partial data.
-      await writeFile(
-        join(RESULTS_DIR, 'model-comparison.json'),
-        JSON.stringify(
-          { models: MODELS, trials: TRIALS, scenarios: RUN_SCENARIOS.length, records },
-          null,
-          2,
-        ),
-      );
+      // Serialized via writeCheckpoint so concurrent workers can't interleave
+      // writes or overwrite a newer snapshot with an older one.
+      await writeCheckpoint();
     }
 
     async function worker(): Promise<void> {
@@ -766,6 +783,8 @@ test(
     }
 
     await Promise.all(Array.from({ length: Math.min(concurrency, tasks.length) }, worker));
+    // Flush any checkpoint write still queued behind the last records.
+    await checkpointChain;
 
     // Aggregate per model.
     const md = buildReport(records);
