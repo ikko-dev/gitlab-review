@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bumped the pi-ai suite (`@earendil-works/pi-*`) to 0.83.0, refreshing the bundled model registry (adds the gpt-5.6 family) and picking up upstream fixes; the reviewer now supplies pi-ai's `streamSimple` as the agent's now-required stream function ([#144]).
+
 ## [0.9.4] - 2026-07-29
 
 ### Added
@@ -127,6 +131,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.8.6]: https://github.com/weareikko/code-review/compare/0.8.5...0.8.6
 [0.8.5]: https://github.com/weareikko/code-review/compare/0.8.4...0.8.5
 [0.8.4]: https://github.com/weareikko/code-review/compare/0.8.3...0.8.4
+[#144]: https://github.com/weareikko/code-review/pull/144
 [#142]: https://github.com/weareikko/code-review/pull/142
 [#141]: https://github.com/weareikko/code-review/pull/141
 [#140]: https://github.com/weareikko/code-review/pull/140
