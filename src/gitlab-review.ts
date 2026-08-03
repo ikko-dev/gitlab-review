@@ -4,8 +4,9 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { AgentEvent, AgentTool } from '@earendil-works/pi-agent-core';
 import { Agent } from '@earendil-works/pi-agent-core';
-import type { AssistantMessage, KnownProvider, Model } from '@earendil-works/pi-ai';
-import { getModel } from '@earendil-works/pi-ai';
+import type { AssistantMessage, Model } from '@earendil-works/pi-ai';
+import { streamSimple } from '@earendil-works/pi-ai/compat';
+import { getBuiltinModel } from '@earendil-works/pi-ai/providers/all';
 import { createReadOnlyTools } from '@earendil-works/pi-coding-agent';
 import type { Config } from './config.js';
 import { resolveProviderApiKey } from './config.js';
@@ -257,6 +258,27 @@ const SEVERITY_RULE: Record<GitLabReviewSeverity, string | null> = {
 
 const exec = promisify(execFile);
 
+/**
+ * Stream function for the reviewer agent.
+ *
+ * pi-ai >=0.82 requires an explicit stream function (earlier versions built one
+ * internally from model + getApiKey); `streamSimple` is the drop-in. Critically,
+ * 0.83 also moved cloudflare-ai-gateway base-URL substitution — the
+ * `{CLOUDFLARE_ACCOUNT_ID}` / `{CLOUDFLARE_GATEWAY_ID}` placeholders — from a
+ * direct `process.env` read to an explicit `env` on the stream options. Without
+ * threading `env` through, the gateway URL keeps its literal placeholders and
+ * every request fails with Cloudflare 401 2035 ("Invalid request path"). Passing
+ * `env` is harmless for providers whose base URL has no placeholders.
+ *
+ * `stream` is injectable so the env threading can be unit-tested without a live call.
+ */
+export function createReviewStreamFn(
+  stream: typeof streamSimple = streamSimple,
+): typeof streamSimple {
+  return (model, context, options) =>
+    stream(model, context, { ...options, env: process.env as unknown as Record<string, string> });
+}
+
 function defaultCreateAgent(params: CreateAgentParams): AgentLike {
   return new Agent({
     initialState: {
@@ -266,6 +288,7 @@ function defaultCreateAgent(params: CreateAgentParams): AgentLike {
       thinkingLevel: params.thinkingLevel,
     },
     getApiKey: params.getApiKey,
+    streamFn: createReviewStreamFn(),
   });
 }
 
@@ -928,7 +951,7 @@ function resolveModel(modelString: string, baseUrl: string, maxTokens: number): 
     return buildOllamaModel(modelId, effectiveBase, maxTokens);
   }
 
-  const model = getModel(provider as KnownProvider, modelId as never) as Model<string> | undefined;
+  const model = getBuiltinModel(provider as never, modelId as never) as Model<string> | undefined;
   if (!model) {
     throw new ReviewerError(`Unknown model "${modelString}".`, {
       hint: `Check that "${provider}" is a valid provider and "${modelId}" is a registered model ID.`,
