@@ -4,3 +4,6 @@ dist/
 coverage/
 test-results/
 .env
+
+# SWE-PRBench materialized checkouts (reconstructed by materialize.mjs)
+tests/evals/fixtures/swe-prbench/repos/

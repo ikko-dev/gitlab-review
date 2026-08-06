@@ -1,0 +1,2871 @@
+{
+  "config": {
+    "model": "openrouter/openai/gpt-5.6-luna",
+    "depths": ["single", "verify", "full"],
+    "thinking": ["low", "medium", "high"],
+    "trials": 1,
+    "fileAccess": true
+  },
+  "records": [
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.00986795,
+      "tokensTotal": 58902,
+      "latencyMs": 50396,
+      "numFindings": 1,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.007413625,
+      "tokensTotal": 39554,
+      "latencyMs": 20767,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.00764535,
+      "tokensTotal": 31212,
+      "latencyMs": 28523,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.00652175,
+      "tokensTotal": 26818,
+      "latencyMs": 29209,
+      "numFindings": 1,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 2,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.011776225,
+      "tokensTotal": 36586,
+      "latencyMs": 34345,
+      "numFindings": 2,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.012207575,
+      "tokensTotal": 62412,
+      "latencyMs": 22980,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.0082111,
+      "tokensTotal": 31198,
+      "latencyMs": 18873,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.004095,
+      "tokensTotal": 26844,
+      "latencyMs": 21531,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.0141908,
+      "tokensTotal": 63884,
+      "latencyMs": 32502,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.008840975000000001,
+      "tokensTotal": 52154,
+      "latencyMs": 20244,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.014508324999999999,
+      "tokensTotal": 55545,
+      "latencyMs": 27667,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.009156125,
+      "tokensTotal": 64064,
+      "latencyMs": 43270,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.013403300000000002,
+      "tokensTotal": 48685,
+      "latencyMs": 59314,
+      "numFindings": 1,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.01009525,
+      "tokensTotal": 70787,
+      "latencyMs": 61330,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.012404150000000001,
+      "tokensTotal": 67358,
+      "latencyMs": 26331,
+      "numFindings": 1,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.009249975,
+      "tokensTotal": 29938,
+      "latencyMs": 20395,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "low",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.012709525,
+      "tokensTotal": 69390,
+      "latencyMs": 44725,
+      "numFindings": 1,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.010136975,
+      "tokensTotal": 34754,
+      "latencyMs": 19610,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.009053225,
+      "tokensTotal": 36529,
+      "latencyMs": 34142,
+      "numFindings": 1,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.031050824999999997,
+      "tokensTotal": 140544,
+      "latencyMs": 66398,
+      "numFindings": 1,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.03011585,
+      "tokensTotal": 102871,
+      "latencyMs": 69403,
+      "numFindings": 2,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.022257625000000003,
+      "tokensTotal": 110094,
+      "latencyMs": 69836,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.027726725,
+      "tokensTotal": 99216,
+      "latencyMs": 58453,
+      "numFindings": 1,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.012298775000000001,
+      "tokensTotal": 49663,
+      "latencyMs": 70875,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.039695475,
+      "tokensTotal": 284538,
+      "latencyMs": 123997,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.033280649999999995,
+      "tokensTotal": 225360,
+      "latencyMs": 73648,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.028531675,
+      "tokensTotal": 145323,
+      "latencyMs": 56729,
+      "numFindings": 1,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 1
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.014007424999999999,
+      "tokensTotal": 62119,
+      "latencyMs": 57200,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.013126124999999999,
+      "tokensTotal": 49682,
+      "latencyMs": 49266,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.055161475,
+      "tokensTotal": 313610,
+      "latencyMs": 97909,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.01207815,
+      "tokensTotal": 27484,
+      "latencyMs": 24345,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.035451275000000004,
+      "tokensTotal": 148945,
+      "latencyMs": 80867,
+      "numFindings": 1,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.018813625,
+      "tokensTotal": 82744,
+      "latencyMs": 76908,
+      "numFindings": 1,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 2,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "medium",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.05279520000000001,
+      "tokensTotal": 385731,
+      "latencyMs": 200649,
+      "numFindings": 1,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.016142200000000002,
+      "tokensTotal": 59176,
+      "latencyMs": 172232,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.03748175000000001,
+      "tokensTotal": 100536,
+      "latencyMs": 93286,
+      "numFindings": 2,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 1
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.041703875,
+      "tokensTotal": 248669,
+      "latencyMs": 118141,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.02303015,
+      "tokensTotal": 106956,
+      "latencyMs": 59986,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.040424025,
+      "tokensTotal": 188599,
+      "latencyMs": 61786,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.13657172499999998,
+      "tokensTotal": 631865,
+      "latencyMs": 435046,
+      "numFindings": 3,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 3,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.071527775,
+      "tokensTotal": 316196,
+      "latencyMs": 298567,
+      "numFindings": 1,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.094288975,
+      "tokensTotal": 269746,
+      "latencyMs": 212514,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.034536525,
+      "tokensTotal": 161919,
+      "latencyMs": 128858,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.054210674999999986,
+      "tokensTotal": 328199,
+      "latencyMs": 161973,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.060572400000000005,
+      "tokensTotal": 276168,
+      "latencyMs": 116393,
+      "numFindings": 1,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.07384265000000001,
+      "tokensTotal": 390851,
+      "latencyMs": 145600,
+      "numFindings": 3,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.16434035,
+      "tokensTotal": 900502,
+      "latencyMs": 786036,
+      "numFindings": 1,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.00618435,
+      "tokensTotal": 34306,
+      "latencyMs": 17917,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.0057472,
+      "tokensTotal": 50328,
+      "latencyMs": 26585,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.0081111,
+      "tokensTotal": 36057,
+      "latencyMs": 27307,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.007620725,
+      "tokensTotal": 46601,
+      "latencyMs": 46615,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.011285025000000002,
+      "tokensTotal": 58041,
+      "latencyMs": 39227,
+      "numFindings": 0,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.008659,
+      "tokensTotal": 74146,
+      "latencyMs": 39476,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.010157575000000002,
+      "tokensTotal": 47971,
+      "latencyMs": 40738,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.00736965,
+      "tokensTotal": 65952,
+      "latencyMs": 30984,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.010123125,
+      "tokensTotal": 35266,
+      "latencyMs": 26758,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.006689700000000001,
+      "tokensTotal": 55759,
+      "latencyMs": 22150,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.012636375000000002,
+      "tokensTotal": 60198,
+      "latencyMs": 16168,
+      "numFindings": 1,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 1
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.004630825,
+      "tokensTotal": 29670,
+      "latencyMs": 16001,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.0146869,
+      "tokensTotal": 108445,
+      "latencyMs": 52978,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.016039825,
+      "tokensTotal": 99183,
+      "latencyMs": 75492,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.026469050000000004,
+      "tokensTotal": 178890,
+      "latencyMs": 70712,
+      "numFindings": 0,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.009128875,
+      "tokensTotal": 75050,
+      "latencyMs": 42192,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.005136100000000001,
+      "tokensTotal": 34882,
+      "latencyMs": 29478,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "low",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.013612375,
+      "tokensTotal": 77594,
+      "latencyMs": 80611,
+      "numFindings": 1,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "single",
+      "thinking": "high",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.26422000000000007,
+      "tokensTotal": 882562,
+      "latencyMs": 1641481,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.03559202499999999,
+      "tokensTotal": 104784,
+      "latencyMs": 568166,
+      "numFindings": 2,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 2,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.010124250000000001,
+      "tokensTotal": 40909,
+      "latencyMs": 592707,
+      "numFindings": 1,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 1
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.033329325,
+      "tokensTotal": 128403,
+      "latencyMs": 601177,
+      "numFindings": 1,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 1
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.022683500000000002,
+      "tokensTotal": 116700,
+      "latencyMs": 64063,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.037500175000000004,
+      "tokensTotal": 191804,
+      "latencyMs": 68740,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.012704575,
+      "tokensTotal": 61136,
+      "latencyMs": 50194,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.0180709,
+      "tokensTotal": 110907,
+      "latencyMs": 47700,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.032327825000000004,
+      "tokensTotal": 121720,
+      "latencyMs": 88916,
+      "numFindings": 1,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.01581075,
+      "tokensTotal": 82130,
+      "latencyMs": 41952,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.051802350000000004,
+      "tokensTotal": 246971,
+      "latencyMs": 150767,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.058571174999999996,
+      "tokensTotal": 371893,
+      "latencyMs": 235353,
+      "numFindings": 1,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.02865135,
+      "tokensTotal": 125721,
+      "latencyMs": 100130,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.011657025000000001,
+      "tokensTotal": 55296,
+      "latencyMs": 32296,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.01345885,
+      "tokensTotal": 36041,
+      "latencyMs": 28559,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.05120405,
+      "tokensTotal": 214856,
+      "latencyMs": 75271,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.023794799999999998,
+      "tokensTotal": 74051,
+      "latencyMs": 59628,
+      "numFindings": 1,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 2,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "medium",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.09239649999999999,
+      "tokensTotal": 637319,
+      "latencyMs": 198184,
+      "numFindings": 1,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.092029675,
+      "tokensTotal": 661529,
+      "latencyMs": 170189,
+      "numFindings": 1,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.092472625,
+      "tokensTotal": 266164,
+      "latencyMs": 208343,
+      "numFindings": 2,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 2,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.015744925,
+      "tokensTotal": 69510,
+      "latencyMs": 50317,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.11914907500000002,
+      "tokensTotal": 497035,
+      "latencyMs": 365778,
+      "numFindings": 1,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 1
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.050072575,
+      "tokensTotal": 260310,
+      "latencyMs": 131292,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.0990723,
+      "tokensTotal": 346272,
+      "latencyMs": 244340,
+      "numFindings": 1,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.018027449999999997,
+      "tokensTotal": 77885,
+      "latencyMs": 43918,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.09359314999999999,
+      "tokensTotal": 478773,
+      "latencyMs": 216655,
+      "numFindings": 1,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.056318425000000005,
+      "tokensTotal": 229471,
+      "latencyMs": 102548,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.08631335000000001,
+      "tokensTotal": 366672,
+      "latencyMs": 141830,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.018760574999999998,
+      "tokensTotal": 58266,
+      "latencyMs": 12208,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.18861735000000004,
+      "tokensTotal": 781335,
+      "latencyMs": 362898,
+      "numFindings": 2,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 2,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.020870575000000002,
+      "tokensTotal": 75503,
+      "latencyMs": 20349,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.024283375000000003,
+      "tokensTotal": 112186,
+      "latencyMs": 36819,
+      "numFindings": 2,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 2,
+      "verdicts": {
+        "CONFIRMED": 2,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "verify",
+      "thinking": "high",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.10854810000000001,
+      "tokensTotal": 504863,
+      "latencyMs": 232136,
+      "numFindings": 2,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.0343827,
+      "tokensTotal": 127486,
+      "latencyMs": 45690,
+      "numFindings": 2,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.034599250000000005,
+      "tokensTotal": 132534,
+      "latencyMs": 69763,
+      "numFindings": 2,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.049337925000000005,
+      "tokensTotal": 323872,
+      "latencyMs": 44632,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.022459225,
+      "tokensTotal": 111625,
+      "latencyMs": 17225,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.025018300000000004,
+      "tokensTotal": 144432,
+      "latencyMs": 21051,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.023418575,
+      "tokensTotal": 86685,
+      "latencyMs": 29104,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.043608775,
+      "tokensTotal": 177102,
+      "latencyMs": 60912,
+      "numFindings": 1,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.053222325,
+      "tokensTotal": 169930,
+      "latencyMs": 23858,
+      "numFindings": 2,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.015123999999999999,
+      "tokensTotal": 75929,
+      "latencyMs": 37701,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.0402946,
+      "tokensTotal": 163634,
+      "latencyMs": 32525,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.059502749999999986,
+      "tokensTotal": 215131,
+      "latencyMs": 70250,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.04088865,
+      "tokensTotal": 219693,
+      "latencyMs": 29776,
+      "numFindings": 1,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "low",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.05564125000000001,
+      "tokensTotal": 196955,
+      "latencyMs": 39327,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.027558850000000006,
+      "tokensTotal": 95503,
+      "latencyMs": 28570,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.027781875,
+      "tokensTotal": 105665,
+      "latencyMs": 42145,
+      "numFindings": 3,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 3,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.038206000000000004,
+      "tokensTotal": 173587,
+      "latencyMs": 75033,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.08847665,
+      "tokensTotal": 324969,
+      "latencyMs": 76858,
+      "numFindings": 2,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.07283447500000001,
+      "tokensTotal": 203886,
+      "latencyMs": 89710,
+      "numFindings": 4,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 3,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.11141582500000001,
+      "tokensTotal": 706892,
+      "latencyMs": 83951,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.066765025,
+      "tokensTotal": 301134,
+      "latencyMs": 101862,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.056611024999999995,
+      "tokensTotal": 230438,
+      "latencyMs": 73553,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.06896937499999999,
+      "tokensTotal": 335236,
+      "latencyMs": 62444,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.07591584999999998,
+      "tokensTotal": 408103,
+      "latencyMs": 84367,
+      "numFindings": 2,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 2
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.037887375,
+      "tokensTotal": 212639,
+      "latencyMs": 43747,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.12428097500000003,
+      "tokensTotal": 567156,
+      "latencyMs": 231032,
+      "numFindings": 2,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.1437074,
+      "tokensTotal": 593333,
+      "latencyMs": 155806,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 1,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.06333752499999999,
+      "tokensTotal": 289032,
+      "latencyMs": 91935,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.110495025,
+      "tokensTotal": 539556,
+      "latencyMs": 93964,
+      "numFindings": 3,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "medium",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.09635345000000002,
+      "tokensTotal": 331120,
+      "latencyMs": 77678,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "backstage__32466",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.04499745,
+      "tokensTotal": 175146,
+      "latencyMs": 66283,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "stylelint__8985",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.043491024999999996,
+      "tokensTotal": 141156,
+      "latencyMs": 54123,
+      "numFindings": 0,
+      "goldCode": 1,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "effect__5952",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.05738684999999999,
+      "tokensTotal": 201368,
+      "latencyMs": 89594,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "node-postgres__3547",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.17311179999999995,
+      "tokensTotal": 433820,
+      "latencyMs": 229142,
+      "numFindings": 5,
+      "goldCode": 7,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 3,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "stylelint__9062",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.267267475,
+      "tokensTotal": 1537125,
+      "latencyMs": 192230,
+      "numFindings": 1,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 2,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "stylelint__8953",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.22285545,
+      "tokensTotal": 881181,
+      "latencyMs": 313580,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "vitest__9152",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.24497215000000003,
+      "tokensTotal": 861528,
+      "latencyMs": 362670,
+      "numFindings": 4,
+      "goldCode": 1,
+      "goldDefects": 1,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 3,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "stylelint__9044",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.4583642249999999,
+      "tokensTotal": 1938620,
+      "latencyMs": 700080,
+      "numFindings": 5,
+      "goldCode": 2,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 5,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "stylelint__9060",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.13096525000000003,
+      "tokensTotal": 569862,
+      "latencyMs": 196556,
+      "numFindings": 0,
+      "goldCode": 3,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "vitest__9512",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.11023285000000002,
+      "tokensTotal": 541386,
+      "latencyMs": 140707,
+      "numFindings": 0,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "transformers.js__1436",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.05256474999999999,
+      "tokensTotal": 219434,
+      "latencyMs": 46038,
+      "numFindings": 0,
+      "goldCode": 6,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "stylelint__9074",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.17745695,
+      "tokensTotal": 830671,
+      "latencyMs": 128329,
+      "numFindings": 3,
+      "goldCode": 4,
+      "goldDefects": 0,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 3
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "vega__4219",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.13461880000000004,
+      "tokensTotal": 552449,
+      "latencyMs": 164072,
+      "numFindings": 1,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "zod__5672",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.25364180000000003,
+      "tokensTotal": 816222,
+      "latencyMs": 129659,
+      "numFindings": 0,
+      "goldCode": 2,
+      "goldDefects": 1,
+      "goldDefectsMatched": 0,
+      "goldMatchedAny": 0,
+      "verdicts": {
+        "CONFIRMED": 0,
+        "PLAUSIBLE": 0,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "zod__5578",
+      "difficulty": "Type2_Contextual",
+      "trial": 0,
+      "costTotal": 0.527443525,
+      "tokensTotal": 2242197,
+      "latencyMs": 758941,
+      "numFindings": 3,
+      "goldCode": 5,
+      "goldDefects": 2,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 1,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    },
+    {
+      "depth": "full",
+      "thinking": "high",
+      "task_id": "vitest__9521",
+      "difficulty": "Type1_Direct",
+      "trial": 0,
+      "costTotal": 0.5447768999999999,
+      "tokensTotal": 3326888,
+      "latencyMs": 939151,
+      "numFindings": 4,
+      "goldCode": 8,
+      "goldDefects": 3,
+      "goldDefectsMatched": 1,
+      "goldMatchedAny": 1,
+      "verdicts": {
+        "CONFIRMED": 2,
+        "PLAUSIBLE": 2,
+        "FABRICATED": 0
+      }
+    }
+  ]
+}
